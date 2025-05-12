@@ -1,0 +1,63 @@
+
+<?php //button for creating things when logged in
+if (isset($_SESSION["user"])){
+?>
+<form method="post">
+    <button name="create">create</button>
+</form>
+<?php
+}
+?>
+
+
+<style>
+    #some{
+        max-width:50%;
+        max-height:50%;
+    }
+
+</style>
+<?php
+foreach ($things as $thing){
+    ?>
+    <div>
+        <h2><?=$thing["userName"]?></h2>
+        <p><?= date("g:i:s d.m.Y" ,strtotime($thing["thingAge"]))?></p>
+        <p><?=$thing["thingText"]?></p>
+        <?php
+        if ($thing["thingFile"]===null);
+        else if ($thing["FileIsWhat"]==="image"){
+            ?>
+                <img id="some" src="<?=$thing["thingFile"]?>" width="auto" height="auto">
+            <?php
+        }
+        else {
+            ?>
+            <a href="<?=$thing["thingFile"]?>"><?=substr($thing["thingFile"], 10)?></a>
+            <?php
+        }
+        ?>
+        <?php
+        if(isset($_SESSION["user"]))
+        if ($_SESSION["user"]["userId"]===(int)$thing["thingOwnerId"]){
+            ?>
+            <form method="post" enctype="multipart/form-data">
+                <input type="hidden" value="<?=$thing["thingID"] ?>"name="editID">
+                <input type="hidden" value="<?=$thing["thingText"] ?>"name="editText">
+                <input type="hidden" value="<?=$thing["thingFile"] ?>"name="editFile">
+                <input type="hidden" value="<?=$thing["FileIsWhat"] ?>"name="editType">
+                <button name="remove">remove</button>
+                <button name="edit">edit</button>
+            </form>
+            <?php
+        }
+        echo "<br>";
+        var_dump($thing);
+        ?>
+        <!--<p><?=$thing["thingTags"]?></p> !-->
+    </div>
+    
+    <?php
+}
+
+?>

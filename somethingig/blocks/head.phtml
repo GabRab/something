@@ -1,0 +1,58 @@
+<?php
+$first =!isset($_cookie["first"]);
+if ($first){
+    setcookie("first", "true");
+}
+if (isset($_SESSION["user"])){
+    var_dump($_SESSION["user"]);
+}
+
+?>
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <nav>
+        <div>
+            <a href="/somethingig/something.php">something</a>
+        </div>
+
+        <div>
+            <a href="/somethingig/about.php">about</a>
+        </div>
+        <?php
+        if (!isset($_SESSION["user"])){
+        ?>
+        <div>
+            <a href="/somethingig/register.php">register</a>
+        </div>
+        <div>
+            <a href="/somethingig/login.php">login</a>
+        </div>
+        <?php
+        }
+        else{
+            ?>
+        <div>
+            <div>
+
+                <a href="/somethingig/profile.php">profile</a>
+            </div>
+            <div>
+                <?=$_SESSION["user"]["userName"]?>
+            </div>
+        </div>    
+            <?php
+        }
+        ?>
+
+
+    </nav>
