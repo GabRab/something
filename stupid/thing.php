@@ -351,7 +351,6 @@ function createThing($db, $thingOwner, $thingText, $thingFile, $thingTags){
 
 
     header("Location: /somethingig/something.php");
-    //it sends the stuff, into "things", but I still need to make the tag system with thingTags
     
     
 }
