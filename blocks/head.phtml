@@ -22,21 +22,26 @@ if (isset($_SESSION["user"])){
 </head>
 <body>
     <nav>
-        <div>
-            <a href="/somethingig/something.php">something</a>
+        <div class="navLeft">
+
+            <div>
+                <a href="/somethingig/something.php">something</a>
+            </div>
+            <div>
+                <a href="/somethingig/documentation.php">documentation</a>
+            </div>
+            <div>
+                <a href="/somethingig/thingTags.php">Tags</a>
+            </div>
+            <div>
+                <a href="/somethingig/groups.php">groups</a>
+            </div>
         </div>
-        <div>
-            <a href="/somethingig/documentation.php">documentation</a>
-        </div>
-        <div>
-            <a href="/somethingig/thingTags.php">Tags</a>
-        </div>
-        <div>
-            <a href="/somethingig/groups.php">groups</a>
-        </div>
-        <?php
+        <div class="navRight">
+
+            <?php
         if (!isset($_SESSION["user"])){
-        ?>
+            ?>
         <div>
             <a href="/somethingig/register.php">register</a>
         </div>
@@ -48,10 +53,6 @@ if (isset($_SESSION["user"])){
         else{
             ?>
         <div>
-            <div>
-
-                <a href="/somethingig/profile.php">profile</a>
-            </div>
             <?php
             if ($_SESSION["user"]["userType"]===1){
                 ?>
@@ -61,14 +62,15 @@ if (isset($_SESSION["user"])){
                         text-decoration: ;
                         font-weight: bold;
                     }
-                </style>
+                    </style>
                 <?php
             }
             ?>
-        
-            <div id="userName">
-                <?=$_SESSION["user"]["userName"]?>
+            <div>
+                <a id="userName" href="/somethingig/profile.php"><?=$_SESSION["user"]["userName"]?></a>
             </div>
+        </div>
+            
         </div>    
         <?php
         }

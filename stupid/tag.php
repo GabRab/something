@@ -1,29 +1,21 @@
 <?php
 function listTags($db, $tagType){
-    $list = mysqli_prepare($db, "
-    SELECT tagName, tagDesc, COUNT(thingtags.tagId) AS tagCount
+    $list = "
+    SELECT * , COUNT(thingtags.tagId) AS tagCount
     FROM tags
-    JOIN thingtags ON thingtags.tagId = tags.tagId
+    LEFT JOIN thingtags ON thingtags.tagId = tags.tagId
     WHERE tagType = ?
     GROUP BY tags.tagId
-    ");
-    if ($list===false){
-        echo "<h2> query failed </h2>";
-        exit;
-    }
-    mysqli_stmt_bind_param($list, "s", $tagType);
-    if (!mysqli_execute($list)){
-        echo "<h2> list execution failed</h2>";
-        exit;
-    }
-    $result = mysqli_fetch_all(mysqli_stmt_get_result($list), MYSQLI_ASSOC);
-    if (!$result){
-        echo "<h2> failed fetching info </h2>";
-        exit;
-    }
+    ORDER BY COUNT(thingtags.tagId) DESC
+    ";
+    $type[0]=$tagType;
+    $fetch =mysqli_execute_query($db, $list, $type);
+    $list = mysqli_fetch_all($fetch, MYSQLI_ASSOC);
+    //if (!$list){
+    //}
     //JOIN for "extra info" option in profile settings or something, where stuff like creators of tags, or something bonus :)
     //maybe even developer commentary like valve, but this is only a website :>
-    return $result;
+    return $list;
 }
 function createTag($db, $tagName, $tagDesc, $tagType){
     
@@ -39,7 +31,7 @@ function createTag($db, $tagName, $tagDesc, $tagType){
         exit;
     };
     if (mysqli_fetch_assoc(mysqli_stmt_get_result($checkName))!==null){
-        echo "<h2> thingTag with this name already exists </h2>";
+        echo "<h2> tag with this name already exists </h2>";
         exit;
     }
     

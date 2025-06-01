@@ -23,3 +23,147 @@
     border-style: solid;
     border-width:1px;
 }
+nav {
+    width:99%;
+    display:flex;
+    flex-direction: row;
+    gap: 20rem;
+
+    margin: 1rem auto 4rem auto ;
+    padding:0.5rem;
+}
+.navLeft{
+    display:flex;
+    flex-direction:row;
+    flex-grow:9;
+    background-color:rgb(228, 228, 228);
+    padding:0.5rem;
+    gap: 1rem;
+    flex-wrap:nowrap;
+    justify-content: flex-start;
+    width:70%;
+}
+.navLeft div{
+    display:flex;
+    align-items: stretch;
+    flex-grow:1;
+}
+a{
+    padding: 0.5rem;
+    text-align: center;
+    flex-grow:1;
+    text-decoration:none;
+    background-color:rgb(74, 74, 74); 
+    color:rgb(217, 217, 217);
+    border:white solid;
+}
+a:hover{
+    transition-duration:0.5s;
+    background-color:rgb(221, 221, 221); 
+    color:rgb(0, 0, 0);
+    border:black solid;
+}
+.navRight div{
+    display:flex;
+    align-items: stretch;
+    flex-grow:1;
+}
+.navRight{
+    display:flex;
+    flex-grow:1;
+    flex-direction:row;
+    background-color:rgb(63, 63, 63);
+   padding:0.5rem;
+    gap: 15rem;
+    
+    width:30%;
+  
+}
+
+
+/*something*/
+#some{
+    max-width:50%;
+    max-height:50%;
+}
+#userImage{
+    width: 100px;
+    height:100px;
+    border-radius: 2%;
+    border-color: black;
+    border-style: solid;
+    border-width:1px;
+}
+.allTags{
+    width:95%;
+    display:flex;
+    flex-direction:row;
+    gap:1rem;
+    margin:auto;
+    flex-grow:1;
+    border:solid, black;
+    border-radius:20px;
+    background-image:linear-gradient( 270deg,black, white);
+    z-index: 1;
+    overflow: hidden;
+}
+.thingTags{
+    display: flex;
+    flex-grow:1;
+    flex-direction:column;
+    flex-wrap:wrap;
+    background-color:rgb(223, 223, 223);
+    gap:10px;
+    z-index: 0;
+    text-align:center;
+}
+.thingTag{
+    display: flex;
+    flex-grow:1;
+    flex-direction:row;
+    gap:1rem;
+    background-color:rgb(237, 237, 237);
+    border:solid rgb(114, 114, 114);
+    flex-grow:1;
+    max-height: 3.5rem;
+}
+.userTags{
+    max-width: 35%;
+    display: flex;
+    flex-grow:1;
+    flex-direction:column;
+    flex-wrap:wrap;
+    background-color:rgb(163, 163, 163);
+    gap:10px;
+    z-index: 0;
+    text-align:center;
+}
+.userTag{
+    display: flex;
+    flex-grow:1;
+    flex-direction:row;
+    gap:1rem;
+    background-color:rgb(237, 237, 237);
+    border:solid rgb(114, 114, 114);
+    flex-grow:1;
+    max-height: 3.5rem;
+}
+.groupTags{
+    display: flex;
+    flex-grow:1;
+    flex-direction:column;
+    flex-wrap:wrap;
+    background-color:rgb(109, 109, 109);
+    gap:10px;
+    z-index: 0;
+    text-align:center;
+}
+.groupTag{
+    display: flex;
+    flex-grow:1;
+    flex-direction:row;
+    gap:1rem;
+    background-color:rgb(237, 237, 237);
+    border:solid rgb(114, 114, 114);
+    max-height: 3.5rem;
+}

@@ -2,14 +2,11 @@
 require "./stupid/init.php";
 require "./stupid/tag.php";
 require "./blocks/head.phtml";
+//don't need to create tags, too troublesome to check which ones exist, so tags are made when USERs register and THINGs get created and tags are assigned to them, GROUPs on the other hand... I haven't even finished them ;-;
 
-if (isset($_POST["confirm"])) createTag($db, $_POST["tagName"], $_POST["tagDesc"], "THING");
-
-//I don't need this now, tags are created when things are created and the tag doesn't exist yet
-//if (isset($_SESSION["user"]))//only users can create tags >:/ 
-//if (isset($_POST["createTag"])) require "./tagCreate.phtml";
-$list = listTags($db, "THING");
-
+$thingTags = listTags($db, "THING");
+$userTags = listTags($db, "USER");
+$groupTags = listTags($db, "GROUP");
 require "./thingTags.phtml";
 require "./blocks/tail.phtml";
 ?>
