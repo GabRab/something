@@ -17,6 +17,7 @@ if (isset($_SESSION["user"])){
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="some.css">
     <title>Document</title>
 </head>
 <body>
@@ -24,9 +25,14 @@ if (isset($_SESSION["user"])){
         <div>
             <a href="/somethingig/something.php">something</a>
         </div>
-
         <div>
-            <a href="/somethingig/about.php">about</a>
+            <a href="/somethingig/documentation.php">documentation</a>
+        </div>
+        <div>
+            <a href="/somethingig/thingTags.php">Tags</a>
+        </div>
+        <div>
+            <a href="/somethingig/groups.php">groups</a>
         </div>
         <?php
         if (!isset($_SESSION["user"])){
@@ -46,11 +52,25 @@ if (isset($_SESSION["user"])){
 
                 <a href="/somethingig/profile.php">profile</a>
             </div>
-            <div>
+            <?php
+            if ($_SESSION["user"]["userType"]===1){
+                ?>
+                <style>
+                    #userName{
+                        color:lightskyblue;
+                        text-decoration: ;
+                        font-weight: bold;
+                    }
+                </style>
+                <?php
+            }
+            ?>
+        
+            <div id="userName">
                 <?=$_SESSION["user"]["userName"]?>
             </div>
         </div>    
-            <?php
+        <?php
         }
         ?>
 

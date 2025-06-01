@@ -15,21 +15,54 @@ if (isset($_SESSION["user"])){
         max-width:50%;
         max-height:50%;
     }
-
-</style>
-<?php
+    #userImage{
+        width: 100px;
+        height:100px;
+        border-radius: 2%;
+        border-color: black;
+        border-style: solid;
+        border-width:1px;
+    }
+    
+    </style>
+<div>
+    <?php
 foreach ($things as $thing){
     ?>
-    <div>
-        <h2><?=$thing["userName"]?></h2>
-        <p><?= date("g:i:s d.m.Y" ,strtotime($thing["thingAge"]))?></p>
-        <p><?=$thing["thingText"]?></p>
+<div>
+
         <?php
+
+
+if ((int)$thing["userType"]===1){
+    ?>
+     <style>
+         <?="#user".$thing["userId"]?>{
+            color: lightskyblue;
+            font-weight: bold;
+        }
+     </style>
+    <?php
+ }
+ ?>
+    <div class="thingStuff">
+        <div> <!-- top of thing!-->
+            <div class="thingUserStuff">
+                <h2 id="<?="user".$thing["userId"]?>"><?=$thing["userName"]?></h2>
+                <img src="<?=$thing["userImage"]?>" alt="<?=$thing["userName"]?>" id="userImage">
+            </div>
+            <div class="thingAgeStuff">
+                <p><?= date("g:i:s d.m.Y" ,strtotime($thing["thingAge"]))?></p>
+            </div>
+        </div>
+        <div class="thingFileStuff">
+            <p><?=$thing["thingText"]?></p>
+            <?php
         if ($thing["thingFile"]===null);
         else if ($thing["FileIsWhat"]==="image"){
             ?>
                 <img id="some" src="<?=$thing["thingFile"]?>" width="auto" height="auto">
-            <?php
+                <?php
         }
         else {
             ?>
@@ -37,27 +70,79 @@ foreach ($things as $thing){
             <?php
         }
         ?>
+
+
+        </div>
+        <div class="thingTagDiv">
+            <?php
+            $tagIds = explode(",", $thing["tagIds"]);
+            $tagNames =explode(",", $thing["tagNames"]);//turns names into arrs 
+            $tagDescs=explode(",", $thing["tagDescs"]);
+            $tagTypes=explode(",", $thing["tagTypes"]);
+            //now connect each tagId with each tagName
+            $tags = [];
+            for ($i=0;$i<count($tagIds);$i++){
+                $tags[$i]["tagId"]=$tagIds[$i];//for future use :)
+                $tags[$i]["tagName"]=$tagNames[$i];
+                $tags[$i]["tagDesc"]=$tagDescs[$i];
+                $tags[$i]["tagType"]=$tagTypes[$i];//for checking if a tag is a USER or THING or GROUP type (different stylizations) ... this is going to be such a pain for the tags created before I added tagTypes to thing Creation
+            };
+            foreach ($tags as $tag){
+                if (($tag["tagId"])){//checks if there are tags (the statement returns null if there are no tags)
+                    ?>
+                <div class="thingTagStuff">
+                    <p><?=$tag["tagName"]?></p>
+                    <p><?=$tag["tagDesc"]?></p>
+                    <p><?=$tag["tagType"]?></p>
+                </div>
+                <?php
+                }
+            }
+            ?>
+        </div>
+
+
         <?php
         if(isset($_SESSION["user"]))
-        if ($_SESSION["user"]["userId"]===(int)$thing["thingOwnerId"]){
+        if ($_SESSION["user"]["userId"]===(int)$thing["userId"]||$_SESSION["user"]["userType"]!==null){//people with userType that isn't null will be able to change everything
             ?>
-            <form method="post" enctype="multipart/form-data">
-                <input type="hidden" value="<?=$thing["thingID"] ?>"name="editID">
-                <input type="hidden" value="<?=$thing["thingText"] ?>"name="editText">
-                <input type="hidden" value="<?=$thing["thingFile"] ?>"name="editFile">
-                <input type="hidden" value="<?=$thing["FileIsWhat"] ?>"name="editType">
-                <button name="remove">remove</button>
-                <button name="edit">edit</button>
-            </form>
-            <?php
+            <div class="thingChangeStuff">
+                <form method="post" enctype="multipart/form-data">
+                    <input type="hidden" value="<?=$thing["thingId"]?>"name="editId">
+                    <input type="hidden" value="<?=$thing["thingText"]?>"name="editText">
+                    <input type="hidden" value="<?=$thing["thingFile"]?>"name="editFile">
+                    <input type="hidden" value="<?=$thing["FileIsWhat"]?>"name="editType">
+                    <button name="remove">remove</button>
+                    
+                    <?php
+                    if ($_SESSION["user"]["userId"]===(int)$thing["userId"]){
+                    //ONLY USERS CAN EDIT THEIR OWN STUFF, I DON'T WANT TO PUT STUFF INTO OTHER PEOPLES MOUTHS
+                    ?>
+                        <button name="edit">edit</button>
+                    <?php
+                    }
+                    ?>
+                </form>
+            </div>
+                <?php
         }
         echo "<br>";
-        var_dump($thing);
+        //var_dump($thing);
         ?>
-        <!--<p><?=$thing["thingTags"]?></p> !-->
+        <!-- a field of small tags, which extends when prompted(button), only a bit is shown beforehand !-->
+    </div><!-- 
+    divides comment from other thing...
+    feature for comments to rollout.........NEEDS JS
+    !-->
+    <div id="comms">
+        <form method="post">
+            <button href="./somethingComms.phtml" id="showComms" name="showComms">comments</button>
+            <input name="showOfThing" type="hidden" value="<?=$thing["thingId"]?>">
+        </form>
     </div>
-    
-    <?php
-}
+</div><!-- for whole post!-->
 
+<?php
+}
 ?>
+</div>

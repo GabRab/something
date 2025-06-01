@@ -24,11 +24,22 @@
                 <a href="<?=$GLOBALS["editFile"]?>"><?=substr($GLOBALS["editFile"], 10)?></a>
             <?php
         }
+        $tagValue="";
+        foreach($tags as $tag){
+            if ($tag["tagType"]==="THING") $tagValue=$tagValue.$tag["tagName"]." ";
+        }
+        ?>
+        <div>
+            <label for="thingTagNew">tags</label>
+            <input type="text" value="<?=$tagValue?>" name="thingTagNew" id="thingTagNew">
+        </div>
+        <?php
     var_dump($GLOBALS["editFile"]);
     var_dump($GLOBALS["editType"]);
     var_dump($GLOBALS["editText"]);
     var_dump($GLOBALS["editId"]);
     ?>
+    <br>
     <input type="hidden" value="<?=$GLOBALS["editId"]?>" name="IdChange" id="IdChange">
     <button name="somethingEdit" autocomplete="off">finish</button>
 

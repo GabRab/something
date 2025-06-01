@@ -9,7 +9,7 @@ require "./blocks/head.phtml";
         require "./profileImage.phtml";
     }
     if (isset($_POST["changeName"])) changeName($db, $_POST["name"]);
-    if (isset($_POST["changePass"])) changePass($db, $_POST["pass"]);
+    if (isset($_POST["changePass"])&&($_POST["newPass"]===$_POST["newPassCheck"])) changePass($db, $_POST["pass"], $_POST["newPass"]);
     if (isset($_POST["changeDesc"])) changeDesc($db, $_POST["desc"]);
     if (isset($_POST["changeImage"])) changeImage($db, $_FILES["image"]);
     else require "./profile.phtml";

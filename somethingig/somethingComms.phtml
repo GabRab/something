@@ -1,0 +1,109 @@
+ <style>
+     #userImage{
+         width: 100px;
+         height:100px;
+         border-radius: 2%;
+         border-color: black;
+         border-style: solid;
+         border-width:1px;
+        }
+</style>
+        <div>
+        <div> <!-- top of thing!-->
+            <?php
+            var_dump($thing);
+            echo "<br><br>";
+
+            ?>
+            <div>
+                <h2 id="<?="user".$thing["userId"]?>"><?=$thing["userName"]?></h2>
+                <img src="<?=$thing["userImage"]?>" alt="<?=$thing["userName"]?>" id="userImage">
+            </div>
+            <p><?= date("g:i:s d.m.Y" ,strtotime($thing["thingAge"]))?></p>
+        </div>
+        <div>
+            <p><?=$thing["thingText"]?></p>
+            <?php
+        if ($thing["thingFile"]===null);
+        else if ($thing["FileIsWhat"]==="image"){
+            ?>
+                <img id="some" src="<?=$thing["thingFile"]?>" width="auto" height="auto">
+                <?php
+        }
+        else {
+            ?>
+            <a href="<?=$thing["thingFile"]?>"><?=substr($thing["thingFile"], 10)?></a>
+            <?php
+        }//need to change thingFiles to add randomness, so files don't delete eachother
+        ?>
+        </div>
+        <?php
+        if(isset($_SESSION["user"])){//IT IS NOT SET, WHY ARE YOU DOING THIS
+
+            if ($_SESSION["user"]["userId"]===(int)$thing["userId"]||$_SESSION["user"]["userType"]!==null){//people with userType that isn't null will be able to change everything
+                ?>
+            <form method="post" enctype="multipart/form-data">
+                <input type="hidden" value="<?=$thing["thingId"]?>"name="editId">
+                <input type="hidden" value="<?=$thing["thingText"]?>"name="editText">
+                <input type="hidden" value="<?=$thing["thingFile"]?>"name="editFile">
+                <input type="hidden" value="<?=$thing["FileIsWhat"]?>"name="editType">
+                <button name="remove">remove</button>
+                <button name="edit">edit</button>
+            </form>
+            <?php
+        }
+        echo "<br>";
+        var_dump($thing);
+        ?>
+</div>
+
+<form method="POST" enctype="multipart/form-data" autocomplete="off" style="padding:24px">
+    <fieldset style="padding:24px">
+        <legend>comment</legend>
+        <div>
+            <label for="commText"> text <br></label>
+            <!--<input style="width:200px; height:300px;" type="text" name="commText" id="commText"> !-->
+            <textarea name="commText" id="commText" rows="10" cols="100"></textarea>
+        </div>
+        <div>
+            <label for="commFile"> files/images </label>
+            <input type="file" name="commFile" id="commFile">
+        </div>
+        
+        <button name="finishComm" autocomplete="off">finish</button>
+        
+    </fieldset>
+</form>
+<?php
+}
+//needs 2 requests, 1 for thing, other for comm (I'm not dealing with more array complications)
+//thing
+//---------
+//create comm
+foreach ($comms as $coom){
+    var_dump($coom);
+?>   
+<p><?=$coom["userId"]?></p>
+<p><?=$coom["comAge"]?></p>
+
+<p><?=$coom["comText"]?></p>
+
+<!--need img differentiation here!!-->
+<?php
+if($coom["comFile"]!==null)
+if ($coom["fileType"]==="image"){
+    ?>
+    <img src="<?=$coom["comFile"]?>">
+    <?php
+}
+else{
+?>
+    <a href="<?=$coom["thingFile"]?>"><?=substr($thing["thingFile"], 10)?></a>
+<?php
+}
+//don't forget edit and delete if owner ;D
+?>
+
+ <?php
+}
+?>
