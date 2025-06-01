@@ -1,0 +1,58 @@
+<!--
+    need to add tag creator, where you add a tag and a description of said tag
+    tag sections/groups like user:Boi group:4chan thing:thingName(not this one, search with tags, and then search with a LIKE sql request)
+    different tagTypes have different colors
+
+    ATTENTION
+    tagType input worries me
+    I can make SELECT - fixed amount of groups, not complete madness and easier for servers to work with
+    input TEXT - very bad idea! Giving them freedom would cause so much bad stuff. WHY WOULD YOU NEED MORE?
+    WERY WELL
+    I will make it a select input then.
+    So far there are 3 groups/types of tags:
+    1.User (auto generate upon registration)
+    2.Thing (generate and attach to a thing based on it's relations and chosen audience/visibility)
+    3.Group (attach to users? to make connection, attach to things to connect to group/fanbase) - kind of like thing tag aswell tho
+
+
+    it will first check NAME and TYPE of the tag, before adding to tag list
+    then things will get the ability to change tags during EDIT and CREATION
+    
+
+    ?? - should I add a thingCreator? (I don't see why not)
+         wait SHOULDN'T I CREATE A WHOLE PAGE FOR GROUPS?
+
+
+    LET'S SEE
+    users -> userGroups
+    things -> thingTags + creatorTag + ALL
+    
+
+    WAIT
+    default thingTags = {"image", "video", "text"} // no don't think about it, just keep it as it is
+    Tags are meant for searching THINGS MAINLY
+
+    !GROUPS will get a separate page.!
+
+   ->that means that adding a tagType input is useless and actually makes MORE problems
+    
+
+    -don't forget to make a list of tags to choose from, with their description appearing when :hover
+    ?admin groups
+
+    could add a "theme" creation tool where you pick colors of stuff (I could make an input, where you choose color value based on hex, rgb values, selection list, or a color "wheel")
+    maybe post it in the database and hold competitions on which is the most popular (like UGLY, UNREADABLE, PRETTY, POPULAR contests), though you can just post the values and copy it bit by bit... (too much work :d)
+    could also add a special symbol for searching ([user: Cony; tag: thing] could change to user:Cony tag:thing or something else)
+    I've been sitting here for 2 hours!
+
+
+    hovering over tags will bring up description and clicking said tag will put it into the search input and bring you to "something"(main page)
+!-->
+<form method="POST">
+    <label for="tagName" require>tag name</label>
+    <input type="text" name="tagName" id="tagName" autocomplete="off" required>
+    <label for="tagDesc">tag description</label>
+    <input type="text" name="tagDesc" id="tagDesc" autocomplete="off">
+
+    <button name="confirm" autocomplete="off">create</button>
+</form>
