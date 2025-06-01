@@ -1,0 +1,27 @@
+<?php
+if (isset($_SESSION["user"])){// I need: joining groups, exiting groups, making groups
+
+?>
+<div>
+    <form method="POST">
+        <button name="createGroup">create group</button>
+    </form>
+</div>
+<h2>your groups</h2>
+
+<!-- add group listing where userName is !-->
+<!-- I probably won't need to change userNames in connections, since it already is only connected to the user, just gonna have to change it in the tags!-->
+
+<h2>groups</h2>
+<?php
+}
+
+foreach($list as $group){
+var_dump($group);
+?>
+
+    <p><?=$group["tagName"]?></p>
+    <p><?=$group["tagDesc"]?></p>
+    <?php
+}
+?>

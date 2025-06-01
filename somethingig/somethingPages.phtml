@@ -1,0 +1,17 @@
+
+
+<form method="POST">
+<div style="display:flex; flex-direction: row; width:10%; margin:auto; text-align:middle">
+    <button style="flex-grow:1" name="previous" id="previous"><</button>
+    <p style="flex-grow:5" id="pageNumber"><?=$_SESSION["pageNumber"]?></p>
+    <button style="flex-grow:1" name="unprevious" id="unprevious">></button>
+</div>
+</form>
+<script>
+    //hides pages, when there isn't anything new, to prevent request spam
+    if (<?=$_SESSION["pageNumber"]?>>1) console.log("hello");
+    if (!(<?=$_SESSION["pageNumber"]?>>0))document.getElementById("previous").style.visibility = "hidden";
+    if (<?=$_SESSION["some"]["thingAmount"]?>!==11) document.getElementById("unprevious").style.visibility = "hidden";
+ 
+
+</script>
