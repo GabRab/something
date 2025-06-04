@@ -7,30 +7,33 @@ require "./blocks/head.phtml";
 //IMMA set this as one if it doesn't exist, then Imma put page select at bottom, so I don't have to make a new request at server for amount of things
 //require "./somethingPages.phtml";//gonna need to fetch [amount of things on page]+1 (to check if there is another page available) using LIMIT
 
-//something list
-//sets tag as false to show everything, unless changed by search
-//changes page number
-if (!isset($_SESSION["pageNumber"])) $_SESSION["pageNumber"] = 0;//initial page number, so it doesn't jump elsewhere when you check out a thing
+/*
+if (!isset($pageNum)) $pageNum = 0;//initial page number, so it doesn't jump elsewhere when you check out a thing
+if (isset($_GET["unprevious"]))$pageNum+=1;
+if (isset($_GET["previous"]))$pageNum-=1;
+if ($pageNum<0) $pageNum=0;
+*/
+
+if (!isset($_GET["pageNum"])) $_GET["pageNum"]=0;
+var_dump($_GET["pageNum"]);
+//show everything if no tags
 $_SESSION["some"]["tags"] = false;
-if (isset($_POST["unprevious"]))$_SESSION["pageNumber"]+=1;
-if (isset($_POST["previous"]))$_SESSION["pageNumber"]-=1;
-if ($_SESSION["pageNumber"]<0) $_SESSION["pageNumber"]=0;
 //changes tags, to search for specific things
-if (isset($_POST["search"])) {$_SESSION["some"]["tags"]=$_POST["searchStr"]; $_SESSION["pageNumber"]=0;}//so that pageId doesn't mess up (I'm going)
+if (isset($_POST["search"])) {$_SESSION["some"]["tags"]=$_POST["searchStr"]; $pageNum=0;}//so that pageId doesn't mess up (I'm going)
 //since I want to keep searched text, Imma move this here
 require "./search.phtml";
-$things = listSomething($db, $_SESSION["some"]["tags"], $_SESSION["pageNumber"]);    
-require "./somethingPages.phtml";
+$things = listSomething($db, $_SESSION["some"]["tags"], $_GET["pageNum"]);    
+$maxPage = intval(getMaxPage($db));//max page count
+var_dump($maxPage);
+if(intval($_GET["pageNum"])>intval($maxPage)) $things = listSomething($db, $_SESSION["some"]["tags"], $maxPage);    
+
 if (isset($_POST["create"])){
     require "./somethingCreate.phtml";//opens form for inputs
 }
 //finally gets things from server and shows them using something.phtml
 //$things = listSomething($db, $_POST["searchStr"], $_SESSION["pageNumber"]);    
-require "./something.phtml";
 
 //for js, so it can hide page buttons
-$_SESSION["some"]["thingAmount"]=count($things);
-if (isset($things[10])) array_splice($things, 10, 1);
 
 
 
@@ -39,9 +42,13 @@ if (isset($_POST["finish"])){//if form filled, add to database and show
 }
 if (isset($_POST["showComms"])||isset($_POST["finishComm"])){//if wants comms show them
     $_SESSION["comment"]["thingId"]=$_POST["showOfThing"];
-    header("Location: /somethingig/somethingComms.php");
+    //header("Location: /somethingig/somethingComms.php");
 }
-
+else {
+    require "./somethingPages.phtml";
+    require "./something.phtml";
+    require "./somethingPages.phtml";
+}
 
 
 
@@ -63,7 +70,6 @@ if (isset($_POST["somethingEdit"])){
     //var_dump($edit);
 }
 echo "<br>";
-require "./somethingPages.phtml";
 require "./blocks/tail.phtml";
 /*27.05.2025
     searching with tags, and includes in text..........done
@@ -74,5 +80,38 @@ require "./blocks/tail.phtml";
 */
 ?>
 <script>
+    //page logic for multiple page selectors
+    let switchBack = false;
+    for (let i=0; i<document.getElementsByClassName("back").length;i++){
+                if (document.getElementById("pageNumber").value<=0){
+                document.getElementsByClassName("back")[i].style.visibility="hidden";
+            }
+                
+                console.log(document.getElementsByClassName("back")[i]);
+                document.getElementsByClassName("back")[i].addEventListener("click", ()=>{
+                    
+                    if (!switchBack){
+                        switchBack = true;
+                        document.getElementById("pageNumber").value--;
+                    }
+                    document.getElementById("pages").submit();
+                })
+    }
+    let switchForth =false;//switch for updating pageNumber
+    for (let i=0; i<document.getElementsByClassName("forth").length;i++){//for multiple page selections (top and bottom, maybe somewhere else, but idk)
+        console.log(i);
+        if (<?=$maxPage?><= document.getElementById("pageNumber").value){
+            document.getElementsByClassName("forth")[i].style.visibility="hidden";
+        }
+                console.log(document.getElementsByClassName("forth")[i]);
+                document.getElementsByClassName("forth")[i].addEventListener("click", ()=>{
+                    if (!switchForth){//makes sure that only sends once (goes to next page)
+                        let switchForth = true;
+                        document.getElementById("pageNumber").value++;
+                    }
+                    document.getElementById("pages").submit();
+                })
+            }
+
 
 </script>

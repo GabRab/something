@@ -11,6 +11,8 @@ require "./blocks/head.phtml";
 
 //!!!VERY IMPORTANT
 //divide the listed things into pages (LIMIT 30 OFFSET ?*30)..................................................................DONE, but kinda janky :3
+//PROBLEM - page select is not working on bottom of page for some reason :(...................................................
+//FIX PAGING YOU DUMBASS......................................................................................................DONE  working with js and php is like working with my siblings, but better
 
 //adding counts of thingtag connection to each tag and displaying it in tags..................................................DONE
 //need css and artwork........................................................................................................

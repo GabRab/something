@@ -1,17 +1,17 @@
-
-
-<form method="POST">
-<div style="display:flex; flex-direction: row; width:10%; margin:auto; text-align:middle">
-    <button style="flex-grow:1" name="previous" id="previous"><</button>
-    <p style="flex-grow:5" id="pageNumber"><?=$_SESSION["pageNumber"]?></p>
-    <button style="flex-grow:1" name="unprevious" id="unprevious">></button>
+<?php
+if (!isset($_GET["pageNum"])) $_GET["pageNum"]=0;
+?>
+<form method="GET" name="pages" id="pages">
+<div class="pageSelect">
+    <a class="back"><</a>
+    <input type="number" value="<?=$_GET["pageNum"]?>" id="pageNumber" name="pageNum" max="<?=$maxPage?>" min="0">
+    <a class="forth">></a>
 </div>
 </form>
-<script>
-    //hides pages, when there isn't anything new, to prevent request spam
-    if (<?=$_SESSION["pageNumber"]?>>1) console.log("hello");
-    if (!(<?=$_SESSION["pageNumber"]?>>0))document.getElementById("previous").style.visibility = "hidden";
-    if (<?=$_SESSION["some"]["thingAmount"]?>!==11) document.getElementById("unprevious").style.visibility = "hidden";
- 
+<?php
 
-</script>
+//I could load a value into input, and change it with js?
+//idk I am confused
+
+// I think I will just hide the pageNum input and add js to change its values
+?>

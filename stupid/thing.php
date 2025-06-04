@@ -5,7 +5,13 @@
 //first it selects things based on all THING tags, then GROUP and USER
 //I should also add creator USER tags on things
 //also tags of other people for fanart or something
-function listSomething($db, $tags, $pageNumber){
+function getMaxPage($db, $perPage=10){
+    $rest =mysqli_query($db, "SELECT COUNT(thingId) FROM things");
+    $pages = mysqli_fetch_all($rest, MYSQLI_NUM);
+    var_dump($pages);
+    return $pages[0][0]/=$perPage;//returns amount of pages
+}
+function listSomething($db, $tags, $pageNumber=0){
     
     $finalStmt = "
     SELECT DISTINCT things.thingId, things.thingText, things.thingFile, things.FileIsWhat, things.thingAge, users.userId, users.userName, users.userDesc, users.userImage, users.userAge, users.userType , GROUP_CONCAT(DISTINCT thingtags.tagId) AS tagIds, GROUP_CONCAT(tags.tagName ORDER BY tags.tagId ASC) AS tagNames, GROUP_CONCAT(tags.tagDesc ORDER BY tags.tagId ASC) AS tagDescs, GROUP_CONCAT(tags.tagType ORDER BY tags.tagId ASC) AS tagTypes
@@ -127,7 +133,7 @@ function listSomething($db, $tags, $pageNumber){
         //limits to pages
         $finalStmt="$finalStmt 
         LIMIT ? OFFSET ?";//adds LIMIT (limits to amount of rows retrieved) OFFSET(how many rows it skips and then applies LIMIT)
-        array_push($AND, 11, $pageNumber*10);//adds corresponding values ()
+        array_push($AND, 10, $pageNumber*10);//adds corresponding values ()
        
         $quer =mysqli_execute_query($db, $finalStmt, $AND);
         $finalDat = mysqli_fetch_all($quer,MYSQLI_ASSOC);
