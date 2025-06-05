@@ -56,6 +56,7 @@ guess that's one more thing to store in session?
 I should make an ad corner... it is a bad idea, but the thought of children going to a corner to increase their .........too hilarious to not add when I figure out how to add adds
 "time spent in the ad corner" timer and then flexing it to others is hilarious...........................................lol
 
-
+05.06.2025
+someThingComms.php is just for show now. I don't need it :)
 */
 ?>
