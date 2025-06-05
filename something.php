@@ -22,7 +22,6 @@ $_SESSION["some"]["tags"] = false;
 if (isset($_POST["search"])) {$_SESSION["some"]["tags"]=$_POST["searchStr"]; $pageNum=0;}//so that pageId doesn't mess up (I'm going)
 //since I want to keep searched text, Imma move this here
 require "./search.phtml";
-$things = listSomething($db, $_SESSION["some"]["tags"], $_GET["pageNum"]);    
 $maxPage = intval(getMaxPage($db));//max page count
 var_dump($maxPage);
 if(intval($_GET["pageNum"])>intval($maxPage)) $things = listSomething($db, $_SESSION["some"]["tags"], $maxPage);    
@@ -30,21 +29,35 @@ if(intval($_GET["pageNum"])>intval($maxPage)) $things = listSomething($db, $_SES
 if (isset($_POST["create"])){
     require "./somethingCreate.phtml";//opens form for inputs
 }
-//finally gets things from server and shows them using something.phtml
-//$things = listSomething($db, $_POST["searchStr"], $_SESSION["pageNumber"]);    
-
-//for js, so it can hide page buttons
 
 
 
 if (isset($_POST["finish"])){//if form filled, add to database and show
     createThing($db, $_SESSION["user"]["userId"],$_POST["thingText"], $_FILES["thingFile"], $_POST["thingTags"]);
 }
-if (isset($_POST["showComms"])||isset($_POST["finishComm"])){//if wants comms show them
-    $_SESSION["comment"]["thingId"]=$_POST["showOfThing"];
+
+//comments
+
+//close them if not needed :)
+if (isset($_POST["closeComm"])) {
+    unset($_GET["showComms"]);
+}
+//show comments
+if (isset($_GET["showComms"])){
+    if (isset($_POST["addComm"])) createComm($db, $thing["thingId"], $_POST["commText"], $_FILES["commFile"]);
+    $thing = getThingStuff($db, $_GET["showComms"], "things");
+    $thing = $thing[0];
+    $thingComms = getThingStuff($db, $_GET["showComms"], "comments");
+    require "./somethingComms.phtml";
+    echo "<br><br><br>".var_dump($thing)."<br><br><br>".var_dump($thingComms);
+    
     //header("Location: /somethingig/somethingComms.php");
 }
+
+//show things
+
 else {
+    $things = listSomething($db, $_SESSION["some"]["tags"], $_GET["pageNum"]);    
     require "./somethingPages.phtml";
     require "./something.phtml";
     require "./somethingPages.phtml";
@@ -57,10 +70,10 @@ if (isset($_POST["remove"])){
     removeThing($db, $_POST["editId"]);
 }
 if (isset($_POST["edit"])){
-    (int) $GLOBALS["editId"] = $_POST["editId"];
-    $GLOBALS["editText"] = $_POST["editText"];
-    $GLOBALS["editFile"] = $_POST["editFile"];
-    $GLOBALS["editType"] = $_POST["editType"];
+    (int) $editId = $_POST["editId"];
+    $editText = $_POST["editText"];
+    $editFile = $_POST["editFile"];
+    $editType = $_POST["editType"];
     require "./somethingEdit.phtml";
     var_dump($_SESSION["some"]["tags"]);
 }

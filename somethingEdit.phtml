@@ -5,7 +5,7 @@
     <div>
         <label for="thingText"> text <br></label>
         <!--<input style="width:200px; height:300px;" type="text" name="thingText" id="thingText"> !-->
-        <textarea name="thingTextNew" id="thingTextNew" style="min-height:100px; min-width:500px; max-width: 500px; max-height:100px"><?=$GLOBALS["editText"]?></textarea>
+        <textarea name="thingTextNew" id="thingTextNew" style="min-height:100px; min-width:500px; max-width: 500px; max-height:100px"><?=$editText?></textarea>
     </div>
     <div>
         <label for="thingFile"> files/images </label>
@@ -13,15 +13,15 @@
     </div>
     
     <?php
-    if ($GLOBALS["editFile"]===null);
-        if ($GLOBALS["editType"]==="image"){
+    if ($editFile===null);
+        if ($editType==="image"){
             ?>
-                <img id="some" src="<?=$GLOBALS["editFile"]?>" width="auto" height="auto">
+                <img id="some" src="<?=$editFile?>" width="auto" height="auto">
             <?php
         }
         else {
             ?>
-                <a href="<?=$GLOBALS["editFile"]?>"><?=substr($GLOBALS["editFile"], 10)?></a>
+                <a href="<?=$editFile?>"><?=substr($editFile, 10)?></a>
             <?php
         }
         $tagValue="";
@@ -34,13 +34,10 @@
             <input type="text" value="<?=$tagValue?>" name="thingTagNew" id="thingTagNew">
         </div>
         <?php
-    var_dump($GLOBALS["editFile"]);
-    var_dump($GLOBALS["editType"]);
-    var_dump($GLOBALS["editText"]);
-    var_dump($GLOBALS["editId"]);
+
     ?>
     <br>
-    <input type="hidden" value="<?=$GLOBALS["editId"]?>" name="IdChange" id="IdChange">
+    <input type="hidden" value="<?=$editId?>" name="IdChange" id="IdChange">
     <button name="somethingEdit" autocomplete="off">finish</button>
 
     </fieldset>

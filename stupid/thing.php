@@ -604,28 +604,17 @@ function editThing($db ,$thingId , $thingText, $thingFile, $thingTags){//need to
     header("Location: /somethingig/something.php");
     //return $row;
 }
-//gets comments of a thing in the form of an object
-function thingComms($db, $thingId, $table){
-    $comque = mysqli_prepare($db, "
+
+//gets stuff connected through $thingId from $table
+function getThingStuff($db, $thingId, $table){
+    $comque = "
     SELECT * FROM ".$table."
     JOIN users ON ".$table.".userId = users.userId
     WHERE thingId = ?;
-    ");
-    if ($comque === false){
-        echo "<h2> wrong statement </h2>";
-        exit;
-    }
-    if (!mysqli_stmt_bind_param($comque, "i", $thingId)){
-        echo "<h2> binding failed</h2>";
-        echo mysqli_error($db);
-        exit;
-    }
-    if (!mysqli_execute($comque)){
-        echo "<h2> listComm execution failed</h2>";
-        echo mysqli_error($db);
-        exit;
-    }
-    return mysqli_fetch_all(mysqli_stmt_get_result($comque), MYSQLI_ASSOC);
+    ";//IT DOESN'T WORK OTHERWISE, DON'T CHANGE YOU BASS
+    $pars = [$thingId];
+    $fetch =mysqli_execute_query($db, $comque, $pars);
+    return mysqli_fetch_all($fetch, MYSQLI_ASSOC);
 }
 
 function createComm($db, $thingId, $commText, $commFile){
@@ -643,33 +632,19 @@ function createComm($db, $thingId, $commText, $commFile){
         if (!file_exists("someFiles")){//if no place for file
             mkdir("someFiles");
         }
-        $filePath = "someFiles/". $commFile["name"];
+        $filePath = "someFiles/".uniqid().$commFile["name"];
         move_uploaded_file($commFile["tmp_name"], $filePath);
     }
     
     //prepares statement and executes it
-    $stmt = mysqli_prepare($db, "
+    $stmt = "
         INSERT INTO comments (userId, thingId, comText, comFile, fileType)
         VALUES (?, ?, ?, ?, ?);
-        ");
-    if ($stmt === false) {
-        echo "<h2> statement failed /h2>";
-        echo mysqli_error($db);
-        exit;
-    }
-    if (!mysqli_stmt_bind_param($stmt, "iisss", $_SESSION["user"]["userId"], $thingId, $commText, $filePath, $isWhat)){
-        echo "<h2> binding failed </h2>";
-        echo mysqli_error($db);
-        exit;
+        ";
+    $arr = [$_SESSION["user"]["userId"], $thingId, $commText, $filePath, $isWhat];
+    if (mysqli_execute_query($db, $stmt, $arr)===false){
+        echo "you did something wrong";
     };
-    if (!mysqli_execute($stmt)){
-        echo "<h2> execution failed </h2>";
-        echo mysqli_error($db);
-        exit;
-    };
-    header("Location: /somethingig/somethingComms.php");
-    //it sends the stuff, into "comments" which get shown once you click on button
-    
 }
 
 

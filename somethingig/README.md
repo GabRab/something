@@ -1,6 +1,0 @@
-"# something" 
-"15.05.2025 - test2-10 passwords are test; fixing register (checks for used names, logins automatically after registration) + finished password changing"
-"16.05.2025 - added ability to change and delete stuff if admin(probably shouldn't put stuff into peoples mouths)"
-"17.05.2025 - added css changing profile name into skyblue bold text (should just add a tag thingy... prototype then), added creating and listing tags on a new page, added tags on user register, test 11-14 are from testing the tag insert"
-"21.05.2025 - added comments ot things, ouch owie my eyes, gonna need to play with css soon, still need tag system tho"
-"28.05.2025 - added tag searching and changed about to documentation"

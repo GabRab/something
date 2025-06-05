@@ -41,7 +41,7 @@ if ((int)$thing["userType"]===1){
             </div>
         </div>
         <div class="thingFileStuff">
-            <p><?=$thing["thingText"]?></p>
+            <p style="white-space: pre-wrap;"><?=$thing["thingText"]?></p>
             <?php
         if ($thing["thingFile"]===null);
         else if ($thing["FileIsWhat"]==="image"){
@@ -120,9 +120,8 @@ if ((int)$thing["userType"]===1){
     feature for comments to rollout.........NEEDS JS
     !-->
     <div id="comms">
-        <form method="post">
-            <button href="./somethingComms.phtml" id="showComms" name="showComms">comments</button>
-            <input name="showOfThing" type="hidden" value="<?=$thing["thingId"]?>">
+        <form method="GET">
+            <button id="showComms" name="showComms" value="<?=$thing["thingId"]?>">comments</button>
         </form>
     </div>
 </div><!-- for whole post!-->

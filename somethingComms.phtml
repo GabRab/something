@@ -8,6 +8,12 @@
          border-width:1px;
         }
 </style>
+<div>
+    <form method="POST">
+        <button name="closeComm">X</button>
+    </form>
+</div>
+
         <div>
         <div> <!-- top of thing!-->
             <?php
@@ -48,7 +54,13 @@
                 <input type="hidden" value="<?=$thing["thingFile"]?>"name="editFile">
                 <input type="hidden" value="<?=$thing["FileIsWhat"]?>"name="editType">
                 <button name="remove">remove</button>
-                <button name="edit">edit</button>
+                <?php
+                if ($_SESSION["user"]["userId"]===(int)$thing["userId"]){
+                    ?>
+                    <button name="edit">edit</button>
+                    <?php
+                }
+                ?>
             </form>
             <?php
         }
@@ -60,6 +72,9 @@
 <form method="POST" enctype="multipart/form-data" autocomplete="off" style="padding:24px">
     <fieldset style="padding:24px">
         <legend>comment</legend>
+        <form method="GET">
+            <input type="hidden" value="<?=$_GET["showComms"]?>" name="showComms">
+        </form>
         <div>
             <label for="commText"> text <br></label>
             <!--<input style="width:200px; height:300px;" type="text" name="commText" id="commText"> !-->
@@ -70,17 +85,18 @@
             <input type="file" name="commFile" id="commFile">
         </div>
         
-        <button name="finishComm" autocomplete="off">finish</button>
+        <button name="addComm" autocomplete="off">finish</button>
         
     </fieldset>
 </form>
 <?php
 }
+
 //needs 2 requests, 1 for thing, other for comm (I'm not dealing with more array complications)
 //thing
 //---------
 //create comm
-foreach ($comms as $coom){
+foreach ($thingComms as $coom){
     var_dump($coom);
 ?>   
 <p><?=$coom["userId"]?></p>
