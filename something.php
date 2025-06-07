@@ -17,7 +17,7 @@ if ($pageNum<0) $pageNum=0;
 */
 if (!isset($_GET["pageNum"])) $_GET["pageNum"]=0;
 if (!isset($_GET["searchStr"])) $_GET["searchStr"]=null;
-var_dump($_GET["pageNum"]);
+
 //changes tags, to search for specific things
 if (isset($_GET["search"])) {
     $_GET["pageNum"]=0;
@@ -45,9 +45,7 @@ if (isset($_POST["create"])){
 
             }
 
-            echo "<br><br>";//I HAVE NO IDEA HOW I FIXED THIS, BUT IT'S FIXED
-            var_dump($_POST["GROUP".$group["tagName"]]);
-            echo "<br>"."GROUP".$group["tagName"]."<br>";
+            //I HAVE NO IDEA HOW I FIXED THIS, BUT IT'S FIXED
 
         }
         var_dump($_POST);
@@ -55,31 +53,32 @@ if (isset($_POST["create"])){
         
         createThing($db, $_SESSION["user"]["userId"],$_POST["thingText"], $_FILES["thingFile"], $_POST["thingTags"], $addedGroupTags);
     }
-
-//comments//
-
-//close them if not needed :)
-    if (isset($_POST["closeComm"])) {
-        unset($_GET["showComms"]);
-    }
-    //show comments
-    if (isset($_GET["showComms"])){
-        $thing = listSomething($db, false, null, $_GET["showComms"]);//slightly modified this to show comm thing aswell
-        var_dump($thing);
-        //add comment
-        if (isset($_POST["addComm"])) createComm($db, $thing["thingId"], $_POST["commText"], $_FILES["commFile"]);
-        $thingComms = getThingStuff($db, $_GET["showComms"], "comments");
-        require "./somethingComms.phtml";
-    }
     
-    //show things
+    //comments//
     
-    else {
-        $things = listSomething($db, $_GET["searchStr"], $_GET["pageNum"]);
-        require "./somethingPages.phtml";
-        require "./something.phtml";
-        require "./somethingPages.phtml";
-    }
+    //close them if not needed :)
+        if (isset($_POST["closeComm"])) {
+            unset($_GET["showComms"]);
+        }
+        //show comments
+        if (isset($_GET["showComms"])){
+            $thing = listSomething($db, false, null, $_GET["showComms"]);//slightly modified this to show comm thing aswell
+            var_dump($thing);
+            //add comment
+            if (isset($_POST["addComm"])) createComm($db, $thing["thingId"], $_POST["commText"], $_FILES["commFile"]);
+            $thingComms = getThingStuff($db, $_GET["showComms"], "comments");
+            require "./somethingComms.phtml";
+        }
+        
+        //show things
+        
+        else {
+            $things = listSomething($db, $_GET["searchStr"], $_GET["pageNum"]);
+            $tagList=[];
+            require "./somethingPages.phtml";
+            require "./something.phtml";
+            require "./somethingPages.phtml";
+        }
     
     
     
@@ -136,12 +135,39 @@ require "./blocks/tail.phtml";
                 console.log(document.getElementsByClassName("forth")[i]);
                 document.getElementsByClassName("forth")[i].addEventListener("click", ()=>{
                     if (!switchForth){//makes sure that only sends once (goes to next page)
-                        let switchForth = true;
-                        document.getElementById("pageNumber").value++;
+                        let switchForth = true   
+                        document.getElementById("pageNumber").value++;//EASTER EGG - if you push button to next page while having maximum number of pages in input, you can get 1 over max
                     }
                     document.getElementById("pages").submit();
                 })
             }
-
-
 </script>
+<div>
+
+    <?php
+foreach ($tagList as $tagInfo){//for each unique tag you found, add an eventListener to update searching
+    ?>
+<script>
+    console.log(document.getElementsByClassName("<?="tag".$tagInfo["tagName"]?>"));
+    let <?="tag".$tagInfo["tagName"]?> = document.getElementsByClassName("<?="tag".$tagInfo["tagName"]?>");
+    for (let i=0; i< <?="tag".$tagInfo["tagName"]?>.length;i++){
+        <?="tag".$tagInfo["tagName"]?>[i].addEventListener("click",()=>{
+            document.getElementById("searchStr").value+="<?=" ".$tagInfo["tagType"].":".$tagInfo["tagName"]?>"
+        })
+        <?="tag".$tagInfo["tagName"]?>[i].addEventListener("mouseover",()=>{
+            <?="tag".$tagInfo["tagName"]?>[i].children[1].style.visibility="visible";
+        })
+        <?="tag".$tagInfo["tagName"]?>[i].addEventListener("mouseleave",()=>{
+            <?="tag".$tagInfo["tagName"]?>[i].children[1].style.visibility="hidden";
+        })
+    };
+</script>
+
+<?php
+}
+?>
+</div>
+
+
+
+

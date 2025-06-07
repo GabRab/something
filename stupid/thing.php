@@ -7,6 +7,7 @@
 //also tags of other people for fanart or something
 function getMaxPage($db, $perPage=10, $tagSearch=null){
     if ($tagSearch){
+        //transforms tagSearch and compares it with existing tags, then it puts it in a str and compares it with connections
         //just gonna copy this here to get all the necessary stuff
         $tags = explode(" ", $tagSearch);//get each tag separately in the form of an array
         //distribute the tags into their respective tagType
@@ -23,30 +24,32 @@ function getMaxPage($db, $perPage=10, $tagSearch=null){
         }
         //joins everything and only shows, where there are ALL the tags... would be easier if I just got * from tags 
         $allTag =mysqli_fetch_all(mysqli_query($db, "SELECT * FROM tags"), MYSQLI_ASSOC);
-        
-        echo "<br><br>";
+    
         
         //searches through all the stuff to get the correct tag Ids
         $tagIds = [];
         foreach ($allTag as $compare){//each gotten tag
-            if (array_search($compare["tagName"],$THING)!==false &&$compare["tagName"] ==="THING") array_push($tagIds, $compare["tagId"]);
-            if (array_search($compare["tagName"],$USER)!==false &&$compare["tagName"] ==="USER") array_push($tagIds, $compare["tagId"]);
-            if (array_search($compare["tagName"],$GROUP)!==false &&$compare["tagName"] ==="GROUP") array_push($tagIds, $compare["tagId"]);
+            if (array_search($compare["tagName"],$THING)!==false &&$compare["tagType"] ==="THING") array_push($tagIds, $compare["tagId"]);
+            if (array_search($compare["tagName"],$USER)!==false &&$compare["tagType"] ==="USER") array_push($tagIds, $compare["tagId"]);
+            if (array_search($compare["tagName"],$GROUP)!==false &&$compare["tagType"] ==="GROUP") array_push($tagIds, $compare["tagId"]);
         }
+        
         $tagIds=implode(",", $tagIds);
+        var_dump($tagIds);
         //I DONT WANNA GET ALL THINGTAG CONNECTIONS
         $thingtagStmt = mysqli_query($db, "
-        SELECT thingtags.thingId, GROUP_CONCAT(DISTINCT thingtags.tagId ORDER BY thingtags.tagId DESC) AS thingTags
+        SELECT thingtags.thingId, GROUP_CONCAT(DISTINCT thingtags.tagId ORDER BY thingtags.tagId ASC) AS thingTags
         FROM thingtags
         WHERE userId IS NULL
         GROUP BY thingtags.thingId
         ");
-        
         $things=[];
         $Jeremy =mysqli_fetch_all($thingtagStmt, MYSQLI_ASSOC);
         foreach ($Jeremy as $Jim){
+            var_dump($Jim);
             if (str_contains($Jim["thingTags"], $tagIds)) array_push($things, $Jim["thingId"]);
         }
+        
         $countStmt = "
         SELECT COUNT(thingId) AS count FROM things
         WHERE thingId IN (".str_repeat("?, ", count($things)-1)."?)";
@@ -93,6 +96,8 @@ function listSomething($db, $tags, $pageNumber=null, $thingId=null){
         $TEXT = [];
         //!!! THIS IS VULNERABLE TO PEOPLE ADDING THING:THING: OR SOMETHING OF THIS SORT, need to warn them
         foreach ($tags as $tag){//filter the tags
+            //searching might be annoying, so Imma keep this in :)
+            if ($tag==="") continue;
             if (strpos($tag, "THING:")!==false)array_push($THING, substr($tag, 6));//add tag to THING arr (ecerything after THING: so 6)
             if (strpos($tag, "USER:")!==false)array_push($USER, substr($tag, 5));//add tag to USER
             if (strpos($tag, "GROUP:")!==false)array_push($GROUP, substr($tag, 6));//add tag to GROUP
@@ -143,10 +148,7 @@ function listSomething($db, $tags, $pageNumber=null, $thingId=null){
         $filterStmt =$filterStmt.   "
             GROUP BY thingId;
         ";
-        //var_dump($filt);
-        echo "<br><br>";
-        //var_dump($filterStmt);
-        echo"<br><br>";
+   
         //so far it checks the tagTypes, gets their Id and NOW I have to bind $filt values to a prepared statement
 
         //binds the the tagIds to the statement I REALLY HOPE IT WORKS LIKE THIS
@@ -155,9 +157,7 @@ function listSomething($db, $tags, $pageNumber=null, $thingId=null){
         //$filtDat = mysqli_fetch_all($tagRes, MYSQLI_NUM);
 
         $filtDat = mysqli_fetch_all($tagRes, MYSQLI_ASSOC); // fetch the data   
-        echo "<br><br>";
-        //var_dump($filtDat);
-        echo "<br><br>";
+
 
         if (count($filtDat)===0){//if nothing, with tags exit;
             echo "nothing with selected tag found :(";
@@ -253,8 +253,11 @@ function createThing($db, $thingOwner, $thingText, $thingFile, $thingTags, $grou
     $THING = "THING";
     $thingTags = explode(" ", $thingTags);
     foreach ($thingTags as $tag){// worried about the "AND"
-        //also why not just use mysqli_bind if you can just do it with "." it's just a string?
+        //I AM GONNA KEEP THIS OUT TO SHAME THE ONES WHO OVERTYPED AND ACCIDENTALLY PUT THE WRONG TAG THERE, also you can just change it so there isn't really any harm in it
+        //if empy string, continue
+        //if ($tag==="") continue;
 
+        //also why not just use mysqli_bind if you can just do it with "." it's just a string?
         //something about 'tag' gonna try binding it aswell
         //turns out I would be opening my database to sql injections (very very bad and old vulnerability), so I guess I need to use bind params ;-;
         $tagStmt = mysqli_prepare($db, "
@@ -545,12 +548,7 @@ function editThing($db ,$thingId , $thingText, $thingFile, $thingTags){//need to
             } 
         }    
     }
-    var_dump($thingTagsFetch);
-    
-    echo "<br><br><br>tagChecks<br>";
-    var_dump($tagChecks);
-    echo "<br><br>thingTagsFetch<br>";
-    var_dump($thingTagsFetch);
+
     //now check for amount of tags that need UPDATE
     if (count($thingTagsFetch)>0){
         $UPDATE = "

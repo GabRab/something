@@ -10,15 +10,12 @@ if (isset($_SESSION["user"])){
 ?>
 
 
-<div>
+<div class="things">
     <?php
 foreach ($things as $thing){
     ?>
 <div class="thing">
-
         <?php
-
-
 if ((int)$thing["userType"]===1){
     ?>
      <style>
@@ -31,18 +28,22 @@ if ((int)$thing["userType"]===1){
  }
  ?>
     <div class="thingStuff">
-        <div> <!-- top of thing!-->
-            <div class="thingUserStuff">
-                <h2 id="<?="user".$thing["userId"]?>"><?=$thing["userName"]?></h2>
-                <img src="<?=$thing["userImage"]?>" alt="<?=$thing["userName"]?>" id="userImage">
-            </div>
-            <div class="thingAgeStuff">
-                <p><?= date("g:i:s d.m.Y" ,strtotime($thing["thingAge"]))?></p>
+        <div>
+            <div class="topOfThing"> <!-- top of thing!-->
+                <div class="thingUserStuff">
+                    <img src="<?=$thing["userImage"]?>" alt="<?=$thing["userName"]?>" id="userImage">
+                </div>
+                <div class="thingTextStuff">
+                    <div class="thingInfo">
+                        <h2 id="<?="user".$thing["userId"]?>"><?=$thing["userName"]?></h2>
+                        <p><?= date("g:i:s d.m.Y" ,strtotime($thing["thingAge"]))?></p>
+                    </div>
+                    <p style="white-space: pre-wrap;"><?=$thing["thingText"]?></p>
+                </div>
             </div>
         </div>
         <div class="thingFileStuff">
-            <p style="white-space: pre-wrap;"><?=$thing["thingText"]?></p>
-            <?php
+                <?php
         if ($thing["thingFile"]===null);
         else if ($thing["FileIsWhat"]==="image"){
             ?>
@@ -75,12 +76,18 @@ if ((int)$thing["userType"]===1){
             foreach ($tags as $tag){
                 if (($tag["tagId"])){//checks if there are tags (the statement returns null if there are no tags)
                     ?>
-                <div class="thingTagStuff">
-                    <p><?=$tag["tagName"]?></p>
-                    <p><?=$tag["tagDesc"]?></p>
-                    <p><?=$tag["tagType"]?></p>
+                <div class="<?="tag".$tag["tagType"]?> thingTagStuff <?="tag".$tag["tagName"]?>">
+                    <p class="tagName"><?=$tag["tagName"]?></p>
+                    <p class="tagDesc" id="<?="tagDesc".$tag["tagDesc"]?> tagDesc"><?=$tag["tagDesc"]?></p>
                 </div>
                 <?php
+                    //gather all unique tags on current page
+                    $switch = false;
+                    foreach ($tagList as $tagLester){
+                        if ($tagLester["tagName"]===$tag["tagName"]) $switch=true; 
+                    }
+                    if ($switch===true) $switch=false;
+                    else array_push($tagList, $tag);
                 }
             }
             ?>

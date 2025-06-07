@@ -67,5 +67,9 @@ should've just made comments into things and added a column which showed the pro
 -going to other pages now keeps the searched tags :)
 -maxPage changes with the search string now and it's 22:58 YAY
 Need to fix adding groupThings
+
+
+07.06.2025
+fixed groupTag on things
 */
 ?>
