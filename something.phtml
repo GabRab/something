@@ -121,6 +121,7 @@ if ((int)$thing["userType"]===1){
     !-->
     <div id="comms">
         <form method="GET">
+            <input type="hidden" name = "pageNum"value="<?=$_GET["pageNum"]?>">
             <button id="showComms" name="showComms" value="<?=$thing["thingId"]?>">comments</button>
         </form>
     </div>

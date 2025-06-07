@@ -8,13 +8,14 @@ require "./blocks/head.phtml";
 //GROUP functionality - connecting players to GROUP tags(just make a new column in thingtags) and connecting groups to things.DONE
 //searching for Users (could maybe just be on tags?)..........................................................................
 //searching using TEXT: (inclusion in thingText)..............................................................................DONE
-//GROUP FUNCTIONS, like JOIN, LEAVE, ETC (+ have to be in group to use group tag on things they post).........................
-
+//GROUP FUNCTIONS, like JOIN, LEAVE, ETC (+ have to be in group to use group tag on things they post).........................DONE (need to figure out how to consistently update page info)
+//IF THING TEXT FIELD IS EMPTY, IT INPUTS AN EMPTY TAG, FUCK. (just go and check the input and compare it with an empty str)..              grass time tho :(
 
 //!!!VERY IMPORTANT
 //divide the listed things into pages (LIMIT 30 OFFSET ?*30)..................................................................DONE, but kinda janky :3
 //PROBLEM - page select is not working on bottom of page for some reason :(...................................................DONE
 //FIX PAGING YOU DUMBASS......................................................................................................DONE  working with js and php is like working with my siblings, but better
+//INFO- to load input with the rest, put it before you get the stuff idk how it works, seemingly random
 
 //adding counts of thingtag connection to each tag and displaying it in tags..................................................DONE
 //need css and artwork........................................................................................................
@@ -25,6 +26,7 @@ require "./blocks/head.phtml";
 //figure out how to make text be over multiple rows, and not just in one row..................................................DONE (in css white-space:pre-wrap)
 //switching between AND and OR statements, maybe even making the user use logic for this instead of just a select.............nah just gonna keep AND on everything
 //make closing comments possible (would probably have to keep page right?)....................................................DONE (the if before show comms)
+
 ?>
 <div class="documentation">
     <div class="documentation-Search">

@@ -18,7 +18,17 @@
             tags are divided by " ", if no tags found, they are made
         </p>
     </div>
+    <div class="groupTagCheck">
+        <?php
+        //list joined groups, to add GROUP tags to thing
+        foreach($groups as $group){
+        ?>
+            <label for="<?="GROUP".$group["tagName"]?>"><?=$group["tagName"]?></label>
+            <input type="checkbox" name="<?="GROUP".$group["tagName"]?>"><!-- ADDING A " " TO THIS TO PREVENT NAMING MISMATCH WITH OTHER INPUTS!-->
+        <?php
+        }
+        ?>
+    </div>
     <button name="finish" autocomplete="off">finish</button>
-
     </fieldset>
 </form>

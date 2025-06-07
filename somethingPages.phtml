@@ -2,6 +2,7 @@
 if (!isset($_GET["pageNum"])) $_GET["pageNum"]=0;
 ?>
 <form method="GET" name="pages" id="pages">
+    <input type="hidden" value="<?=$_GET["searchStr"]?>" name="searchStr" id="searchStr">
 <div class="pageSelect">
     <a class="back"><</a>
     <input type="number" value="<?=$_GET["pageNum"]?>" id="pageNumber" name="pageNum" max="<?=$maxPage?>" min="0">

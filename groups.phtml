@@ -19,9 +19,26 @@ if (isset($_SESSION["user"])){// I need: joining groups, exiting groups, making 
 foreach($list as $group){
 var_dump($group);
 ?>
-
     <p><?=$group["tagName"]?></p>
     <p><?=$group["tagDesc"]?></p>
+    
     <?php
+    //joining and leaving groups
+    if ($group["userId"]!==$_SESSION["user"]["userId"]){
+        ?>
+    <form method="POST">
+        <input type="hidden" name="tagId" value="<?=$group["tagId"]?>">
+        <button name="joinGroup">Join</button>
+    </form>
+    <?php
+    }
+    else{
+        ?>
+        <form method="POST">
+            <input type="hidden" name="tagId" value="<?=$group["tagId"]?>">
+            <button name="leaveGroup">leave</button>
+        </form>
+        <?php
+    }
 }
 ?>

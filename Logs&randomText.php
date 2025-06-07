@@ -30,10 +30,10 @@ userId | thingId | tagId
 14 | null    | 15
 
 -userId to connect with user, thingId to connect to thing.................................................................thinking I guess?
-- should probably make 2 connection tables, 1 for users (groups, thingtags maybe?, their USER tag) .......................that's cool and all, but what about another column in thingtags, which connects all the things and users
+- should probably make 2 connection tables, 1 for users (groups, thingtags maybe?, their USER tag) .......................that's cool and all, but what about another column in thingtags, which connects all the things and users DONE :)
   the other for things (groups, thingtags, creator).......................................................................I can also delete things.userId, it would also help a bit
 
-how to add tags?..........................................................................................................I went with text input (main inspiration is the great tag system at hitomi.la (:   )
+how to add tags?..........................................................................................................I went with text input (main inspiration is the great tag system at hitomi.la (:
 -text input, where you do 'enter' and the tag get's added?
 -special "tag symbol"?
 !make sure to change params after finishing tags!
@@ -58,5 +58,14 @@ I should make an ad corner... it is a bad idea, but the thought of children goin
 
 05.06.2025
 someThingComms.php is just for show now. I don't need it :)
+
+06.06.2025
+-Added joining groups using new column in thingtags (now just a connections table for almost everything)
+-changed listSomething to work for the singular thing shown in comms, so now it also shows tags (should really add js to add tags to search, through values in arrays I got the tags in :D)
+-keep page you're on when checking comments of a thing
+should've just made comments into things and added a column which showed the progress in the comment/thing tree, which would allow for comments on comments on comments on comments on comments, but that is a bit too much
+-going to other pages now keeps the searched tags :)
+-maxPage changes with the search string now and it's 22:58 YAY
+Need to fix adding groupThings
 */
 ?>

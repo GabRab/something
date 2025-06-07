@@ -5,13 +5,66 @@
 //first it selects things based on all THING tags, then GROUP and USER
 //I should also add creator USER tags on things
 //also tags of other people for fanart or something
-function getMaxPage($db, $perPage=10){
+function getMaxPage($db, $perPage=10, $tagSearch=null){
+    if ($tagSearch){
+        //just gonna copy this here to get all the necessary stuff
+        $tags = explode(" ", $tagSearch);//get each tag separately in the form of an array
+        //distribute the tags into their respective tagType
+        $THING = [];
+        $USER = [];
+        $GROUP = [];
+        $TEXT = [];
+        //!!! THIS IS VULNERABLE TO PEOPLE ADDING THING:THING: OR SOMETHING OF THIS SORT, need to warn them
+        foreach ($tags as $tag){//filter the tags
+            if (strpos($tag, "THING:")!==false)array_push($THING, substr($tag, 6));//add tag to THING arr (ecerything after THING: so 6)
+            if (strpos($tag, "USER:")!==false)array_push($USER, substr($tag, 5));//add tag to USER
+            if (strpos($tag, "GROUP:")!==false)array_push($GROUP, substr($tag, 6));//add tag to GROUP
+            if (strpos($tag, "TEXT:")!==false)array_push($TEXT, substr($tag, 5));//checks for TEXT tags (text found in things)
+        }
+        //joins everything and only shows, where there are ALL the tags... would be easier if I just got * from tags 
+        $allTag =mysqli_fetch_all(mysqli_query($db, "SELECT * FROM tags"), MYSQLI_ASSOC);
+        
+        echo "<br><br>";
+        
+        //searches through all the stuff to get the correct tag Ids
+        $tagIds = [];
+        foreach ($allTag as $compare){//each gotten tag
+            if (array_search($compare["tagName"],$THING)!==false &&$compare["tagName"] ==="THING") array_push($tagIds, $compare["tagId"]);
+            if (array_search($compare["tagName"],$USER)!==false &&$compare["tagName"] ==="USER") array_push($tagIds, $compare["tagId"]);
+            if (array_search($compare["tagName"],$GROUP)!==false &&$compare["tagName"] ==="GROUP") array_push($tagIds, $compare["tagId"]);
+        }
+        $tagIds=implode(",", $tagIds);
+        //I DONT WANNA GET ALL THINGTAG CONNECTIONS
+        $thingtagStmt = mysqli_query($db, "
+        SELECT thingtags.thingId, GROUP_CONCAT(DISTINCT thingtags.tagId ORDER BY thingtags.tagId DESC) AS thingTags
+        FROM thingtags
+        WHERE userId IS NULL
+        GROUP BY thingtags.thingId
+        ");
+        
+        $things=[];
+        $Jeremy =mysqli_fetch_all($thingtagStmt, MYSQLI_ASSOC);
+        foreach ($Jeremy as $Jim){
+            if (str_contains($Jim["thingTags"], $tagIds)) array_push($things, $Jim["thingId"]);
+        }
+        $countStmt = "
+        SELECT COUNT(thingId) AS count FROM things
+        WHERE thingId IN (".str_repeat("?, ", count($things)-1)."?)";
+        
+        
+        return floor(mysqli_fetch_all(mysqli_execute_query($db, $countStmt, $things), MYSQLI_ASSOC)[0]["count"]/10);
+
+        
+        
+
+    }
     $rest =mysqli_query($db, "SELECT COUNT(thingId) FROM things");
     $pages = mysqli_fetch_all($rest, MYSQLI_NUM);
-    var_dump($pages);
-    return $pages[0][0]/=$perPage;//returns amount of pages
+    
+    return floor($pages[0][0]/=$perPage);//returns amount of pages
 }
-function listSomething($db, $tags, $pageNumber=0){
+//added thingId param for comments, since I don't want to make new function just for comments when I can add a HAVING clause
+function listSomething($db, $tags, $pageNumber=null, $thingId=null){
     
     $finalStmt = "
     SELECT DISTINCT things.thingId, things.thingText, things.thingFile, things.FileIsWhat, things.thingAge, users.userId, users.userName, users.userDesc, users.userImage, users.userAge, users.userType , GROUP_CONCAT(DISTINCT thingtags.tagId) AS tagIds, GROUP_CONCAT(tags.tagName ORDER BY tags.tagId ASC) AS tagNames, GROUP_CONCAT(tags.tagDesc ORDER BY tags.tagId ASC) AS tagDescs, GROUP_CONCAT(tags.tagType ORDER BY tags.tagId ASC) AS tagTypes
@@ -22,6 +75,14 @@ function listSomething($db, $tags, $pageNumber=0){
     GROUP BY(things.thingId)
     /*IT WORKS, JUST EXPLODE tagId and tagNames and do a foreach on the resulting array*/
     ";
+
+    //for comments only
+    if (isset($thingId)){
+        $finalStmt.="
+        HAVING thingId=?;";
+        $val = [$thingId];
+        return mysqli_fetch_all(mysqli_execute_query($db, $finalStmt, $val), MYSQLI_ASSOC)[0];
+    }
 
     if ($tags){//if searching for something, filter with tags (I should add thingText search aswell)
         $tags = explode(" ", $tags);//get each tag separately in the form of an array
@@ -82,9 +143,9 @@ function listSomething($db, $tags, $pageNumber=0){
         $filterStmt =$filterStmt.   "
             GROUP BY thingId;
         ";
-        var_dump($filt);
+        //var_dump($filt);
         echo "<br><br>";
-        var_dump($filterStmt);
+        //var_dump($filterStmt);
         echo"<br><br>";
         //so far it checks the tagTypes, gets their Id and NOW I have to bind $filt values to a prepared statement
 
@@ -95,7 +156,7 @@ function listSomething($db, $tags, $pageNumber=0){
 
         $filtDat = mysqli_fetch_all($tagRes, MYSQLI_ASSOC); // fetch the data   
         echo "<br><br>";
-        var_dump($filtDat);
+        //var_dump($filtDat);
         echo "<br><br>";
 
         if (count($filtDat)===0){//if nothing, with tags exit;
@@ -110,7 +171,7 @@ function listSomething($db, $tags, $pageNumber=0){
         foreach ($filtDat as $dat){
             if (str_contains($dat["tags"], $tagstr)) array_push($AND, $dat["thingId"]);
         }
-        var_dump($tagstr);
+        //var_dump($tagstr);
         if (count($AND)<1){
             echo "nothing with matching tags found :(";
             exit;
@@ -128,7 +189,6 @@ function listSomething($db, $tags, $pageNumber=0){
             }
             $finalStmt = "$finalStmt AND ".str_repeat("things.thingText LIKE ? OR", count($TEXT)-1)." things.thingText LIKE ?";//adds searching in text
         }
-    
 
         //limits to pages
         $finalStmt="$finalStmt 
@@ -143,7 +203,6 @@ function listSomething($db, $tags, $pageNumber=0){
 
     }
     //gets every thing
-    
     //limits to pages
     $filtDat=[11, 10*$pageNumber];
     $finalStmt= "$finalStmt
@@ -170,18 +229,7 @@ function listSomething($db, $tags, $pageNumber=0){
 
 
 
-
-
-function listTags($db){//I could also specify which things are loaded, but that's too much work and I am too stupid for that
-    $tages = mysqli_query($db, "
-    SELECT thingId, GROUP_CONCAT(DISTINCT tagId)
-    FROM thingTags
-    GROUP BY thingId;
-    ");//STATEMENT GETS thingId and tagId's which are combined into 1 string, make sure to explode them later
-    // arr[thingId(int), tagId(string?)]
-    return mysqli_fetch_all($tages, MYSQLI_ASSOC);
-}
-function createThing($db, $thingOwner, $thingText, $thingFile, $thingTags){
+function createThing($db, $thingOwner, $thingText, $thingFile, $thingTags, $groupTags){
     //checks file
     $isWhat= null;
     $filePath = null;
@@ -331,7 +379,7 @@ function createThing($db, $thingOwner, $thingText, $thingFile, $thingTags){
         echo "get USER tagId exec failed".mysqli_error($db);
         exit;
     }
-    $USER = mysqli_fetch_all(mysqli_stmt_get_result($userTag), MYSQLI_ASSOC)[0]["tagId"];
+    $USER = mysqli_fetch_all(mysqli_stmt_get_result($userTag), MYSQLI_ASSOC)[0]["tagId"];//IF IT WARNS YOU, THAT MEANS THE USER IS OLD AND DOESN'T HAVE A USER TAG
     if($USER)array_push($tagLinks, $USER);//adds creator USER tag to tagId array if said tag exists
     var_dump($tagLinks);
 
@@ -355,8 +403,21 @@ function createThing($db, $thingOwner, $thingText, $thingFile, $thingTags){
         }
     }//this SHOULD insert stuff based on thingId into thingTags... WE'LL SEE
 
+    foreach ($groupTags as $tag){
+        $ins = "
+        INSERT INTO thingTags (thingId, tagId)
+        VALUES (?, ?);";
+        $vals = [$thingId, $tag];
+        if (mysqli_execute_query($db, $ins, $vals)===false){
+            echo "groupTag connection insert failed".mysqli_error($db);
+            exit;
+        }
+        var_dump($groupTags);
+    }
+    var_dump($groupTags);
 
-    header("Location: /somethingig/something.php");
+
+    //header("Location: /somethingig/something.php");
     
     
 }
