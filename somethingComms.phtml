@@ -14,11 +14,8 @@
     </form>
 </div>
 
-   <div class="thing">
-
+<div class="thing">
         <?php
-
-
 if ((int)$thing["userType"]===1){
     ?>
      <style>
@@ -30,19 +27,23 @@ if ((int)$thing["userType"]===1){
     <?php
  }
  ?>
-<div class="thingStuff">
-        <div> <!-- top of thing!-->
-            <div class="thingUserStuff">
-                <h2 id="<?="user".$thing["userId"]?>"><?=$thing["userName"]?></h2>
-                <img src="<?=$thing["userImage"]?>" alt="<?=$thing["userName"]?>" id="userImage">
-            </div>
-            <div class="thingAgeStuff">
-                <p><?= date("g:i:s d.m.Y" ,strtotime($thing["thingAge"]))?></p>
+    <div class="thingStuff">
+        <div>
+            <div class="topOfThing"> <!-- top of thing!-->
+                <div class="thingUserStuff">
+                    <img src="<?=$thing["userImage"]?>" alt="<?=$thing["userName"]?>" id="userImage">
+                </div>
+                <div class="thingTextStuff">
+                    <div class="thingInfo">
+                        <h2 id="<?="user".$thing["userId"]?>"><?=$thing["userName"]?></h2>
+                        <p><?= date("g:i:s d.m.Y" ,strtotime($thing["thingAge"]))?></p>
+                    </div>
+                    <p style="white-space: pre-wrap;"><?=$thing["thingText"]?></p>
+                </div>
             </div>
         </div>
         <div class="thingFileStuff">
-            <p style="white-space: pre-wrap;"><?=$thing["thingText"]?></p>
-            <?php
+                <?php
         if ($thing["thingFile"]===null);
         else if ($thing["FileIsWhat"]==="image"){
             ?>
@@ -75,16 +76,28 @@ if ((int)$thing["userType"]===1){
             foreach ($tags as $tag){
                 if (($tag["tagId"])){//checks if there are tags (the statement returns null if there are no tags)
                     ?>
-                <div class="thingTagStuff">
-                    <p><?=$tag["tagName"]?></p>
-                    <p><?=$tag["tagDesc"]?></p>
-                    <p><?=$tag["tagType"]?></p>
+                <div class="<?="tag".$tag["tagType"]?> thingTagStuff <?="tag".$tag["tagName"]?>">
+                    <p class="tagName"><?=$tag["tagName"]?></p>
+                    <p class="tagDesc" id="<?="tagDesc".$tag["tagDesc"]?> tagDesc"><?=$tag["tagDesc"]?></p>
                 </div>
                 <?php
+                    //gather all unique tags on current page
+                    $switch = false;
+                    foreach ($tagList as $tagLester){
+                        if ($tagLester["tagName"]===$tag["tagName"]) $switch=true; 
+                    }
+                    if ($switch===true) $switch=false;
+                    else array_push($tagList, $tag);
                 }
             }
             ?>
         </div>
+        
+
+    </div><!-- 
+    divides comment from other thing...
+    feature for comments to rollout.........NEEDS JS
+    !-->
 
 
         <?php
@@ -115,8 +128,7 @@ if ((int)$thing["userType"]===1){
         //var_dump($thing);
         ?>
         <!-- a field of small tags, which extends when prompted(button), only a bit is shown beforehand !-->
-</div>
-</div><!-- for whole post!-->
+
 
 <form method="POST" enctype="multipart/form-data" autocomplete="off" style="padding:24px">
     <fieldset style="padding:24px">
@@ -138,37 +150,101 @@ if ((int)$thing["userType"]===1){
         
     </fieldset>
 </form>
+
+
 <?php
 }
-
+?>
+<div class="commsBox">
+<?php
 //needs 2 requests, 1 for thing, other for comm (I'm not dealing with more array complications)
 //thing
 //---------
 //create comm
 foreach ($thingComms as $coom){
-    var_dump($coom);
-?>   
-<p><?=$coom["userId"]?></p>
-<p><?=$coom["comAge"]?></p>
-
-<p style="white-space:pre-wrap"><?=$coom["comText"]?></p>
-
-<!--need img differentiation here!!-->
-<?php
-if($coom["comFile"]!==null)
-if ($coom["fileType"]==="image"){
+    ?>   
+<div class="thing">
+    <?php
+if ((int)$coom["userType"]===1){
     ?>
-    <img src="<?=$coom["comFile"]?>">
+     <style>
+         <?="#user".$coom["userId"]?>{
+             color: lightskyblue;
+             font-weight: bold;
+            }
+     </style>
+    <?php
+ }
+ ?>
+    <div class="thingStuff">
+        <div>
+            <div class="topOfThing"> <!-- top of thing!-->
+                <div class="thingUserStuff">
+                    <img src="<?=$coom["userImage"]?>" alt="<?=$coom["userName"]?>" id="userImage">
+                </div>
+                <div class="thingTextStuff">
+                    <div class="thingInfo">
+                        <h2 id="<?="user".$coom["userId"]?>"><?=$coom["userName"]?></h2>
+                        <p><?= date("g:i:s d.m.Y" ,strtotime($coom["comAge"]))?></p>
+                    </div>
+                    <p style="white-space: pre-wrap;"><?=$coom["comText"]?></p>
+                </div>
+            </div>
+        </div>
+        <div class="thingFileStuff">
+            <?php
+        if ($coom["comFile"]===null);
+        else if ($coom["FileIsWhat"]==="image"){
+            ?>
+                <img id="some" src="<?=$coom["comFile"]?>" width="auto" height="auto">
+                <?php
+        }
+        else {
+            ?>
+            <a href="<?=$coom["comFile"]?>"><?=substr($coom["comFile"], 10)?></a>
+            <?php
+        }
+        ?>
+
+
+</div>
+
+
+
+<?php
+        if(isset($_SESSION["user"]))
+        if ($_SESSION["user"]["userId"]===(int)$coom["userId"]||$_SESSION["user"]["userType"]!==null){//people with userType that isn't null will be able to change everything
+            ?>
+            <div class="thingChangeStuff">
+                <form method="post" enctype="multipart/form-data">
+                    <input type="hidden" value="<?=$coom["comId"]?>"name="comId">
+                    <input type="hidden" value="<?=$coom["comText"]?>"name="comText">
+                    <input type="hidden" value="<?=$coom["comFile"]?>"name="editFile">
+                    <input type="hidden" value="<?=$coom["fileType"]?>"name="editType">
+                    <button name="remove">remove</button>
+                    
+                    <?php
+                    if ($_SESSION["user"]["userId"]===(int)$coom["userId"]){
+                        //ONLY USERS CAN EDIT THEIR OWN STUFF, I DON'T WANT TO PUT STUFF INTO OTHER PEOPLES MOUTHS
+                        ?>
+                        <button name="edit">edit</button>
+                        <?php
+                    }
+                    ?>
+                </form>
+            </div>
+            <?php
+        }
+        echo "<br>";
+        //var_dump($coom);
+        ?>
+        </div> 
+    </div><!-- for whole post!-->
+    <!--need img differentiation here!!-->
+    
+    
     <?php
 }
-else{
 ?>
-    <a href="<?=$coom["thingFile"]?>"><?=substr($thing["thingFile"], 10)?></a>
-<?php
-}
-//don't forget edit and delete if owner ;D
-?>
-
- <?php
-}
-?>
+</div>
+</div>

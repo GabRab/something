@@ -76,7 +76,7 @@ if ((int)$thing["userType"]===1){
             foreach ($tags as $tag){
                 if (($tag["tagId"])){//checks if there are tags (the statement returns null if there are no tags)
                     ?>
-                <div class="<?="tag".$tag["tagType"]?> thingTagStuff <?="tag".$tag["tagName"]?>">
+                <div class="<?=$tag["tagType"]."Tag"?> thingTagStuff <?="tag".$tag["tagName"]?>">
                     <p class="tagName"><?=$tag["tagName"]?></p>
                     <p class="tagDesc" id="<?="tagDesc".$tag["tagDesc"]?> tagDesc"><?=$tag["tagDesc"]?></p>
                 </div>

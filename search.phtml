@@ -1,4 +1,19 @@
-    <form method="GET" id="searchBox">
-        <input type="search" name="searchStr" id="searchStr" value="<?=$_GET["searchStr"]?>">
-        <button name="search" id="searchButton">search</button>
-    </form>
+    <div>
+        <form method="GET" id="searchBox">
+            <?php
+            if (isset($_GET["tagList"])&&$_GET["tagList"]==="open"){
+                ?>
+                <button name="tagList" id="tagList" value="closed">close list</button>
+                <?php
+            }
+            else{
+                ?>
+                    <button name="tagList" id="tagList" value="open">tag list</button>
+                <?php
+            }
+            ?>
+            <input type="search" name="searchStr" id="searchStr" value="<?=$_GET["searchStr"]?>">
+            <button name="search" id="searchButton">search</button>
+        </form>
+    </div>
+    

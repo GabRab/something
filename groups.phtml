@@ -23,6 +23,8 @@ var_dump($group);
     <p><?=$group["tagDesc"]?></p>
     
     <?php
+if (isset($_SESSION["user"])){
+
     //joining and leaving groups
     if ($group["userId"]!==$_SESSION["user"]["userId"]){
         ?>
@@ -40,5 +42,6 @@ var_dump($group);
         </form>
         <?php
     }
+}
 }
 ?>

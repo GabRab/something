@@ -131,54 +131,12 @@ a:hover{
     margin-bottom: 1rem;
 }
 
-.thingTagDiv{
+.commsBox{
     display: flex;
-    flex-direction: row;
-    gap: 1rem;
-    width:50rem;
-    margin-top:1rem;
-    margin-bottom:1rem;
-    height:1rem;
+    flex-direction:column;
+    gap: 5rem;
 }
-.thingTagStuff{
-    border:1px black solid;
-    border-radius:10px;
-    padding:1rem;
-    /*overflow: hidden;*/
-    cursor:pointer;
-    
-    text-align: center;
-}
-.tagName{
-    max-width:2rem;
-    text-align:center;
-    position:relative;
-    margin:auto;
-}
-.tagDesc{
-    visibility:hidden;
-    position:absolute;
-    z-index:1;
-    border-radius: 5px;
-    background:rgb(80, 80, 80);
-    padding:0.1rem;
-}
-
-
-.tagGROUP{
-    background:rgb(157, 152, 128);
-    border:1px solid rgb(134, 121, 83)
-}
-.tagUSER{
-    background:rgb(182, 138, 138);
-    border: 1px solid rgb(135, 93, 93)
-}
-.tagTHING{
-    background-color: rgb(124, 124, 177);
-    border: 1px solid rgb(74, 74, 118);
-}
-
-
+/*/// pageSelect ///*/
 
 .pageSelect{
     background:rgb(90, 90, 90);
@@ -210,13 +168,13 @@ a:hover{
     flex-grow:1;
     background:rgb(229, 229, 229)
 }
-
+/*/// searchBox ///*/
 #searchBox{
     display:flex;
     width:75%;
     flex-direction:row;
     margin:auto;
-   
+    
     height:2rem;
     padding:1rem;
     border-radius:5px;
@@ -229,95 +187,99 @@ a:hover{
     color:rgb(237, 237, 237);
     border:solid 1px rgb(151, 151, 151);
 }
-#searchButton{
+#searchBox button{
     flex-grow:1;
     background-color: rgb(85, 85, 85);
     color:rgb(225, 225, 225)
 }
-#searchButton:hover{
+#searchBox button:hover{
     background-color: rgb(101, 101, 101);
 }
-#searchButton:active{
+#searchBox button:active{
     background-color:rgb(194, 194, 194);
 }
 
 
+.thingChangeStuff button{
+    margin:0.5rem;
+    margin-top: 2rem;
+}
 
 
 
 
-/* tags */
-.allTags{
-    width:95%;
+/*/// tags ///*/
+.tagList{
+    margin: auto;
+    margin-top: 2rem;
+    width:50%;
+    background-color: rgb(108, 110, 111);
+    border:solid rgb(191, 191, 191) 1px;
+    padding:1rem;
+}
+.tagList .thingTagStuff{
+    height:0.5rem;
+}
+.list{
     display:flex;
     flex-direction:row;
-    gap:1rem;
+    flex-wrap: wrap;
+    gap:0.5rem;
     margin:auto;
-    flex-grow:1;
-    border:solid, black;
-    border-radius:20px;
-    background-image:linear-gradient( 270deg,rgb(61, 61, 61) 35%, rgb(240, 240, 240) 70%);
-    z-index: 1;
-    overflow: hidden;
+    padding:1rem;
 }
-.thingTags{
+/*/ thingtags /*/
+.thingTagDiv{
     display: flex;
-    flex-grow:1;
-    flex-direction:column;
-    flex-wrap:wrap;
-    background-color:rgb(118, 118, 118);
-    gap:10px;
-    z-index: 0;
+    flex-direction: row;
+    gap: 1rem;
+    width:50rem;
+    margin-top:1rem;
+    margin-bottom:1rem;
+    height:1rem;
+}
+.list .thingTagStuff{
+    border:1px black solid;
+    border-radius:10px;
+    padding:0.5rem;
+    /*overflow: hidden;*/
+    cursor:pointer;
+    text-align: center;
+
+}
+.thingTagDiv .thingTagStuff{
+    border:1px black solid;
+    border-radius:10px;
+    padding:1rem;
+    /*overflow: hidden;*/
+    cursor:pointer;
+    text-align: center;
+  
+}
+.tagName{
     text-align:center;
+    position:relative;
+    margin:auto;
 }
-.thingTag{
-    display: flex;
-    flex-grow:1;
-    flex-direction:row;
-    gap:1rem;
-    background-color:rgb(128, 128, 128);
-    border:solid rgb(114, 114, 114);
-    flex-grow:1;
-    max-height: 3.5rem;
-    margin:0.5rem;
+.tagDesc{
+    visibility:hidden;
+    position:absolute;
+    z-index:1;
+    border-radius: 5px;
+    background:rgb(80, 80, 80);
+    padding:0.1rem;
 }
-.userTags{
-    max-width: 35%;
-    display: flex;
-    flex-grow:1;
-    flex-direction:column;
-    flex-wrap:wrap;
-    background-color:rgb(94, 94, 94);
-    gap:10px;
-    z-index: 0;
-    text-align:center;
+
+
+.GROUPTag{
+    background:rgb(157, 152, 128);
+    border:1px solid rgb(134, 121, 83)
 }
-.userTag{
-    display: flex;
-    flex-grow:1;
-    flex-direction:row;
-    gap:1rem;
-    background-color:rgb(128, 128, 128);
-    border:solid rgb(114, 114, 114);
-    flex-grow:1;
-    max-height: 3.5rem;
+.USERTag{
+    background:rgb(182, 138, 138);
+    border: 1px solid rgb(135, 93, 93)
 }
-.groupTags{
-    display: flex;
-    flex-grow:1;
-    flex-direction:column;
-    flex-wrap:wrap;
-    background-color:rgb(55, 55, 55);
-    gap:10px;
-    z-index: 0;
-    text-align:center;
-}
-.groupTag{
-    display: flex;
-    flex-grow:1;
-    flex-direction:row;
-    gap:1rem;
-    background-color:rgb(128, 128, 128);
-    border:solid rgb(114, 114, 114);
-    max-height: 3.5rem;
+.THINGTag{
+    background-color: rgb(124, 124, 177);
+    border: 1px solid rgb(74, 74, 118);
 }

@@ -1,0 +1,71 @@
+<div class="tagList">
+
+
+    <h3>THING</h3>
+<div class="list">
+    <?php
+foreach ($THINGTags as $tag){
+    ?>
+   
+   <div class="<?=$tag["tagType"]."Tag"?> thingTagStuff <?="tag".$tag["tagName"]?>">
+       <p class="tagName"><?=$tag["tagName"]?> : <?=$tag["tagCount"]?></p>
+       <p class="tagDesc" id="<?="tagDesc".$tag["tagDesc"]?> tagDesc"><?=$tag["tagDesc"]?></p>
+    </div>
+    <?php
+                    //gather all unique tags on current page
+                    $switch = false;
+                    foreach ($tagList as $tagLester){
+                        if ($tagLester["tagName"]===$tag["tagName"]) $switch=true; 
+                    }
+                    if ($switch===true) $switch=false;
+                    else array_push($tagList, $tag);
+                }
+                ?>
+</div>
+
+<h3>USER</h3>
+<div class="list">
+    <?php
+foreach ($USERTags as $tag){
+    ?>
+   
+   <div class="<?=$tag["tagType"]."Tag"?> thingTagStuff <?="tag".$tag["tagName"]?>">
+       <p class="tagName"><?=$tag["tagName"]?>  <?=$tag["tagCount"]?></p>
+       <p class="tagDesc" id="<?="tagDesc".$tag["tagDesc"]?> tagDesc"><?=$tag["tagDesc"]?></p>
+    </div>
+    <?php
+                    //gather all unique tags on current page
+                    $switch = false;
+                    foreach ($tagList as $tagLester){
+                        if ($tagLester["tagName"]===$tag["tagName"]) $switch=true; 
+                    }
+                    if ($switch===true) $switch=false;
+                    else array_push($tagList, $tag);
+                }
+                ?>
+</div>
+
+<h3>GROUP</h3>
+<div class="list">
+    <?php
+foreach ($GROUPTags as $tag){
+    ?>
+   
+   <div class="<?=$tag["tagType"]."Tag"?> thingTagStuff <?="tag".$tag["tagName"]?>">
+       <p class="tagName"><?=$tag["tagName"]?>  <?=$tag["tagCount"]?></p>
+       <p class="tagDesc" id="<?="tagDesc".$tag["tagDesc"]?> tagDesc"><?=$tag["tagDesc"]?></p>
+    </div>
+    <?php
+                    //gather all unique tags on current page
+                    $switch = false;
+                    foreach ($tagList as $tagLester){
+                        if ($tagLester["tagName"]===$tag["tagName"]) $switch=true; 
+                    }
+                    if ($switch===true) $switch=false;
+                    else array_push($tagList, $tag);
+                }
+                ?>
+
+</div>
+
+</div>

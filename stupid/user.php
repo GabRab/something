@@ -209,7 +209,7 @@ function changeDesc($db, $desc){
     SET tagDesc = ?
     WHERE tagName = ? AND tagType = ?;
     ");
-    mysqli_stmt_bind_param($tagStmt, "si", $desc, $_SESSION["user"]["userName"], $USER);
+    mysqli_stmt_bind_param($tagStmt, "sss", $desc, $_SESSION["user"]["userName"], $USER);
     if(!mysqli_execute($tagStmt)){
         echo "<h2> tag execution failed</h2>";
         exit;

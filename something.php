@@ -15,6 +15,7 @@ if (isset($_GET["unprevious"]))$pageNum+=1;
 if (isset($_GET["previous"]))$pageNum-=1;
 if ($pageNum<0) $pageNum=0;
 */
+$tagList=[];
 if (!isset($_GET["pageNum"])) $_GET["pageNum"]=0;
 if (!isset($_GET["searchStr"])) $_GET["searchStr"]=null;
 
@@ -26,7 +27,6 @@ if (isset($_GET["search"])) {
 require "./search.phtml";
 //normal max page count
 $maxPage = getMaxPage($db, 10, $_GET["searchStr"]);//max page count
-
  
 
 
@@ -69,12 +69,21 @@ if (isset($_POST["create"])){
             $thingComms = getThingStuff($db, $_GET["showComms"], "comments");
             require "./somethingComms.phtml";
         }
-        
+
+
+        //show tag list
+        else if (isset($_GET["tagList"])&&$_GET["tagList"]==="open"){
+            $THINGTags = listTags($db, "THING");
+            $USERTags = listTags($db, "USER");
+            $GROUPTags = ListTags($db, "GROUP");
+            require "./tagList.phtml";
+        }
+
+
         //show things
         
         else {
             $things = listSomething($db, $_GET["searchStr"], $_GET["pageNum"]);
-            $tagList=[];
             require "./somethingPages.phtml";
             require "./something.phtml";
             require "./somethingPages.phtml";
