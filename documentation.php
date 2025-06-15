@@ -32,27 +32,24 @@ require "./blocks/head.phtml";
     <div class="documentation-Search">
         <div class="documentation-Text">
             <h2>searching</h2> <!-- Just go with ".documentationTextContent h2" for this one !-->
-            <p>searching is divided into 3 groups:</p>
+            <p>you can search using:</p>
             <p>1. THING: tags connected to things(posts as many recognise them)</p>
             <p>2. USER: tags made by user registration</p>
             <p>3. GROUP: tags connected to groups</p>
+            <p>4. TEXT: searches for text inside of a things text</p>
             <br>
-            <p>these are the 3 groups, they can be used to search through things, so that you don't get very lost</p>
-            <p>I also made a text filter called TEXT: , which filters out words in a thing's text</p>
-            <br>
+            <p>I also added a tagList next to the search box, it shows you all the tags that exist divided into the 3 main groups</p>
+            <p>If you click on a tag, it gets added to the search box (you can only remove it manually tho)</p>
             <p>searching works with the regular AND stuff, where all things displayed have the searched attributes/tags</p>
         </div>
         <div>
             <h2>pages</h2>
-            <p>I have made it so that something sends you only 10 things to reduce the amount of scrolling and maybe ease down on server usage</p>
-            <p>you can change pages only at the bottom of the page, because I didn't want to send another request, just to reduce the size of another</p>
-            <p>quality over quantity</p>
+            <p>things you get from searching are divided into pages of 10 things</p>
+            <p>I hate js</p>
         </div>
         <div>
             <h2>comments</h2>
-            <p>you can comment on things, though it will send you to another page, so you are going to have to go back</p>
-            <p>atleast the pageNumber is in session, so you don't lose that. adding searchStr into session would just be annoying</p>
-            <p>like hey you need to search for NOTHING, so you get all things... that doesn't sound like a bad idea</p>
+            <p>you can comment on things, I could've just made a thing ranking, and the option to connect things to other things, but that would actually be a smart thing to do</p>
             <p></p>
         </div>
     </div>

@@ -54,8 +54,7 @@ function getMaxPage($db, $perPage=10, $tagSearch=null){
         SELECT COUNT(thingId) AS count FROM things
         WHERE thingId IN (".str_repeat("?, ", count($things)-1)."?)";
         
-        
-        return floor(mysqli_fetch_all(mysqli_execute_query($db, $countStmt, $things), MYSQLI_ASSOC)[0]["count"]/10);
+        return mysqli_fetch_all(mysqli_execute_query($db, $countStmt, $things), MYSQLI_ASSOC)[0]["count"];
 
         
         

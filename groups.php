@@ -12,8 +12,10 @@ if (isset($_POST["leaveGroup"])){
 // the groups table is useless! Just make groups using tagTypes!
 //good point there goes another 3 hours of work :)
 
-if (isset($_SESSION["user"]))//only users can create groups >:/ 
-if (isset($_POST["createGroup"])) require "./groupCreate.phtml";
+if (isset($_SESSION["user"])){//only users can create groups >:/ 
+    $joined = listJoinedGroups($db, $_SESSION["user"]["userId"]);
+    if (isset($_POST["createGroup"])) require "./groupCreate.phtml";
+}
 $list = listTags($db, "GROUP");
 //var_dump($list);
 require "./groups.phtml";

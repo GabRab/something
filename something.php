@@ -27,7 +27,7 @@ if (isset($_GET["search"])) {
 require "./search.phtml";
 //normal max page count
 $maxPage = getMaxPage($db, 10, $_GET["searchStr"]);//max page count
- 
+ var_dump($maxPage);
 
 
 if (isset($_SESSION["user"]))$groups = listJoinedGroups($db, $_SESSION["user"]["userId"]);

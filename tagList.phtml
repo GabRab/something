@@ -30,7 +30,7 @@ foreach ($USERTags as $tag){
     ?>
    
    <div class="<?=$tag["tagType"]."Tag"?> thingTagStuff <?="tag".$tag["tagName"]?>">
-       <p class="tagName"><?=$tag["tagName"]?>  <?=$tag["tagCount"]?></p>
+       <p class="tagName"><?=$tag["tagName"]?> : <?=$tag["tagCount"]?></p>
        <p class="tagDesc" id="<?="tagDesc".$tag["tagDesc"]?> tagDesc"><?=$tag["tagDesc"]?></p>
     </div>
     <?php
@@ -52,7 +52,7 @@ foreach ($GROUPTags as $tag){
     ?>
    
    <div class="<?=$tag["tagType"]."Tag"?> thingTagStuff <?="tag".$tag["tagName"]?>">
-       <p class="tagName"><?=$tag["tagName"]?>  <?=$tag["tagCount"]?></p>
+       <p class="tagName"><?=$tag["tagName"]?> : <?=$tag["tagCount"]?></p>
        <p class="tagDesc" id="<?="tagDesc".$tag["tagDesc"]?> tagDesc"><?=$tag["tagDesc"]?></p>
     </div>
     <?php
